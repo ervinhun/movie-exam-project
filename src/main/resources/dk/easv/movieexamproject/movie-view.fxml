@@ -1,16 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="dk.easv.movieexamproject.MovieController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="dk.easv.movieexamproject.MovieController">
+    <BorderPane>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+        <!-- Left Pane (Filters) -->
+        <left>
+            <VBox spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
+                <Label text="Filters" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                <HBox spacing="5">
+                    <TextField promptText="Search for title" fx:id="searchField" />
+                    <Button text="Search" fx:id="searchButton" />
+                    <Button text="Clear" fx:id="clearButton" />
+                </HBox>
+
+                <VBox spacing="5" fx:id="vBoxCategory">
+                    <Label text="Category" />
+                    <CheckBox text="Action" fx:id="actionCheckbox" />
+                    <CheckBox text="Comedy" fx:id="comedyCheckbox" />
+                    <CheckBox text="Horror" fx:id="horrorCheckbox" />
+                </VBox>
+
+                <VBox spacing="5" fx:id="vBoxRating">
+                    <Label text="IMDB Minimum Rating" />
+                    <RadioButton fx:id="radio2" text="2" />
+                    <RadioButton fx:id="radio3" text="3" />
+                    <RadioButton fx:id="radio4" text="4" />
+                    <RadioButton fx:id="radio5" text="5" />
+                    <RadioButton fx:id="radio6" text="6" />
+                    <RadioButton fx:id="radio7" text="7" />
+                    <RadioButton fx:id="radio8" text="8" />
+                    <RadioButton fx:id="radio9" text="9" />
+                </VBox>
+            </VBox>
+        </left>
+
+        <!-- Center Pane (Table) -->
+        <center>
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <TableView fx:id="moviesTable" style="-fx-focus-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="playColumn" prefWidth="40" />
+                        <TableColumn text="Title" fx:id="titleColumn" prefWidth="200" />
+                        <TableColumn text="IMDB Rating" fx:id="imdbColumn" prefWidth="100" />
+                        <TableColumn text="User Rating" fx:id="userRatingColumn" prefWidth="100" />
+                        <TableColumn text="Categories" fx:id="categoriesColumn" prefWidth="200" />
+                        <TableColumn text="Last View" fx:id="lastViewColumn" prefWidth="150" />
+                        <TableColumn fx:id="controlColumn" prefWidth="100" />
+                    </columns>
+                </TableView>
+
+                <!-- Buttons below table -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Add Movie" fx:id="addMovieButton" />
+                    <Button text="Add Category" fx:id="addCategoryButton" />
+                    <Button text="Delete Category" fx:id="deleteCategoryButton" />
+                    <Button text="Close" fx:id="closeButton" />
+                </HBox>
+            </VBox>
+        </center>
+
+    </BorderPane>
+</StackPane>
