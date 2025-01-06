@@ -12,15 +12,15 @@
                 <Label text="Filters" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
                 <HBox spacing="5">
                     <TextField promptText="Search for title" fx:id="searchField" />
-                    <Button text="Search" fx:id="searchButton" />
-                    <Button text="Clear" fx:id="clearButton" />
+                    <Button text="Search" fx:id="btnSearch" />
+                    <Button text="Clear" fx:id="btnClear" />
                 </HBox>
 
                 <VBox spacing="5" fx:id="vBoxCategory">
                     <Label text="Category" />
-                    <CheckBox text="Action" fx:id="actionCheckbox" />
-                    <CheckBox text="Comedy" fx:id="comedyCheckbox" />
-                    <CheckBox text="Horror" fx:id="horrorCheckbox" />
+                    <CheckBox text="Action" fx:id="cbAction" />
+                    <CheckBox text="Comedy" fx:id="cbComedy" />
+                    <CheckBox text="Horror" fx:id="cbHorror" />
                 </VBox>
 
                 <VBox spacing="5" fx:id="vBoxRating">
@@ -42,22 +42,22 @@
             <VBox spacing="10" style="-fx-padding: 10;">
                 <TableView fx:id="moviesTable" style="-fx-focus-color: transparent;">
                     <columns>
-                        <TableColumn fx:id="playColumn" prefWidth="40" />
-                        <TableColumn text="Title" fx:id="titleColumn" prefWidth="200" />
-                        <TableColumn text="IMDB Rating" fx:id="imdbColumn" prefWidth="100" />
-                        <TableColumn text="User Rating" fx:id="userRatingColumn" prefWidth="100" />
-                        <TableColumn text="Categories" fx:id="categoriesColumn" prefWidth="200" />
-                        <TableColumn text="Last View" fx:id="lastViewColumn" prefWidth="150" />
-                        <TableColumn fx:id="controlColumn" prefWidth="100" />
+                        <TableColumn fx:id="clmPlay" prefWidth="40" />
+                        <TableColumn text="Title" fx:id="clmTitle" prefWidth="200" />
+                        <TableColumn text="IMDB Rating" fx:id="clmImdb" prefWidth="100" />
+                        <TableColumn text="User Rating" fx:id="clmUserRating" prefWidth="100" />
+                        <TableColumn text="Categories" fx:id="clmCategories" prefWidth="200" />
+                        <TableColumn text="Last View" fx:id="clmLastView" prefWidth="150" />
+                        <TableColumn fx:id="clmControl" prefWidth="100" />
                     </columns>
                 </TableView>
 
                 <!-- Buttons below table -->
                 <HBox spacing="10" alignment="CENTER">
-                    <Button text="Add Movie" fx:id="addMovieButton" />
-                    <Button text="Add Category" fx:id="addCategoryButton" />
-                    <Button text="Delete Category" fx:id="deleteCategoryButton" />
-                    <Button text="Close" fx:id="closeButton" />
+                    <Button text="Add Movie" fx:id="btnAddMovie" />
+                    <Button text="Add Category" fx:id="btnAddCategory" />
+                    <Button text="Delete Category" fx:id="btnDeleteCategory" />
+                    <Button text="Close" fx:id="btnClose" />
                 </HBox>
             </VBox>
         </center>
