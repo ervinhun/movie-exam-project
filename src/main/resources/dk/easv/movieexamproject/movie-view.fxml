@@ -34,7 +34,7 @@
 
                 <ListView fx:id="lstCategory" managed="false" prefHeight="200" visible="false">
                 </ListView>
-                <Label fx:id="lblFilterRating" onMouseClicked="#openHideRating" text="IMDB Minimum Rating ▼" />
+                <Label fx:id="lblFilterRating" onMouseClicked="#openHideRating" text="IMDB minimum rating ▼" />
 
                 <VBox fx:id="vBoxRating" managed="false" spacing="5" visible="false">
                     <RadioButton fx:id="radio2" text="2" />
