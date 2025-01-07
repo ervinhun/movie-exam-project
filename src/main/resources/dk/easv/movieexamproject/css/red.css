@@ -1,0 +1,139 @@
+/* Netflix-themed CSS styling for JavaFX */
+
+/* General styling */
+.root {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-background-color: #141414; /* Netflix dark background */
+    -fx-text-fill: #ffffff; /* White text */
+}
+
+/* Label styling */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e50914; /* Netflix red */
+}
+.radio-button {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e50914;
+}
+.list-view {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e50914;
+    -fx-background-color: #141414;
+}
+.check-box {
+    -fx-text-fill: #e50914;
+    -fx-font-size: 14px;
+}
+
+/* ListView */
+.list-view {
+    -fx-background-color: #1E1E1E;
+    -fx-control-inner-background: #1E1E1E;
+    -fx-border-color: #E50914;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+.list-view .list-cell {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-border-color: #333333;
+    -fx-padding: 5;
+}
+.list-view .list-cell:hover {
+    -fx-background-color: #333333;
+    -fx-text-fill: #E50914;
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: #e50914; /* Netflix red */
+    -fx-text-fill: #ffffff; /* White text */
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8 16;
+}
+
+.button:hover {
+    -fx-background-color: #f40612; /* Slightly brighter red */
+}
+
+.button:pressed {
+    -fx-background-color: #a4060d; /* Darker red */
+}
+
+/* TextField styling */
+.text-field {
+    -fx-background-color: #333333; /* Dark grey */
+    -fx-text-fill: #ffffff; /* White text */
+    -fx-border-color: #e50914; /* Netflix red border */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 6;
+}
+
+.text-field:focused {
+    -fx-border-color: #f40612; /* Brighter red on focus */
+}
+
+/* ScrollPane styling */
+.scroll-pane {
+    -fx-background-color: #141414; /* Dark background */
+    -fx-border-color: #e50914; /* Netflix red border */
+}
+
+/* TableView styling */
+.table-view {
+    -fx-background-color: #141414; /* Dark background */
+    -fx-border-color: #333333; /* Dark grey border */
+    -fx-text-fill: #ffffff; /* White text */
+}
+
+.table-column {
+    -fx-text-fill: #ffffff; /* White text */
+    -fx-background-color: #1f1f1f; /* Slightly lighter grey for column headers */
+}
+
+/* Hover effect for table rows */
+.table-row-cell:hover {
+    -fx-background-color: #333333; /* Dark grey hover effect */
+}
+
+/* Additional styling for specific buttons */
+#addMovieButton, #addCategoryButton, #deleteCategoryButton, #closeButton {
+    -fx-background-color: #e50914;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+#addMovieButton:hover, #addCategoryButton:hover, #deleteCategoryButton:hover, #closeButton:hover {
+    -fx-background-color: #f40612;
+}
+
+#addMovieButton:pressed, #addCategoryButton:pressed, #deleteCategoryButton:pressed, #closeButton:pressed {
+    -fx-background-color: #a4060d;
+}
+
+.popup-bg {
+    -fx-background-color: gray;
+    -fx-opacity: 0.45;
+}
+.popup-vbox {
+    -fx-background-color: gray;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 3);
+    -fx-opacity: 1;
+}
+.popup-title {
+    -font-weight: bold;
+    -fx-font-size: 12px;
+}

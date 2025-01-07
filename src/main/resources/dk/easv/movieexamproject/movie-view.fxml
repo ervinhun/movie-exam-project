@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="dk.easv.movieexamproject.MovieController">
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane prefHeight="500.0" prefWidth="1170.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
         <left>
-            <VBox spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10;">
-                <Label text="Filters" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
                 <HBox spacing="5">
-                    <TextField promptText="Search for title" fx:id="searchField" />
-                    <Button text="Search" fx:id="btnSearch" />
-                    <Button text="Clear" fx:id="btnClear" />
+                    <TextField fx:id="searchField" promptText="Search for title" />
+                    <!--
+                    <Button fx:id="btnSearch" text="Search" />
+                    -->
+                    <Button fx:id="btnClear" onMouseClicked="#clearFilters" text="Clear" />
                 </HBox>
+                <Label fx:id="lblFilterCat" onMouseClicked="#openHideCategory" text="Category ▼" />
 
-                <VBox spacing="5" fx:id="vBoxCategory">
-                    <Label text="Category" />
-                    <CheckBox text="Action" fx:id="cbAction" />
-                    <CheckBox text="Comedy" fx:id="cbComedy" />
-                    <CheckBox text="Horror" fx:id="cbHorror" />
-                </VBox>
+                <ListView fx:id="lstCategory" managed="false" prefHeight="200" visible="false">
+                </ListView>
+                <Label fx:id="lblFilterRating" onMouseClicked="#openHideRating" text="IMDB Minimum Rating ▼" />
 
-                <VBox spacing="5" fx:id="vBoxRating">
-                    <Label text="IMDB Minimum Rating" />
+                <VBox fx:id="vBoxRating" managed="false" spacing="5" visible="false">
                     <RadioButton fx:id="radio2" text="2" />
                     <RadioButton fx:id="radio3" text="3" />
                     <RadioButton fx:id="radio4" text="4" />
@@ -34,6 +46,7 @@
                     <RadioButton fx:id="radio8" text="8" />
                     <RadioButton fx:id="radio9" text="9" />
                 </VBox>
+                <Button fx:id="btnApplyFilter" text="Apply filters" />
             </VBox>
         </left>
 
@@ -43,24 +56,178 @@
                 <TableView fx:id="moviesTable" style="-fx-focus-color: transparent;">
                     <columns>
                         <TableColumn fx:id="clmPlay" prefWidth="40" />
-                        <TableColumn text="Title" fx:id="clmTitle" prefWidth="200" />
-                        <TableColumn text="IMDB Rating" fx:id="clmImdb" prefWidth="100" />
-                        <TableColumn text="User Rating" fx:id="clmUserRating" prefWidth="100" />
-                        <TableColumn text="Categories" fx:id="clmCategories" prefWidth="200" />
-                        <TableColumn text="Last View" fx:id="clmLastView" prefWidth="150" />
+                        <TableColumn fx:id="clmTitle" prefWidth="200" text="Title" />
+                        <TableColumn fx:id="clmImdb" prefWidth="100" text="IMDB Rating" />
+                        <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" />
+                        <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" />
+                        <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" />
                         <TableColumn fx:id="clmControl" prefWidth="100" />
                     </columns>
                 </TableView>
 
                 <!-- Buttons below table -->
-                <HBox spacing="10" alignment="CENTER">
-                    <Button text="Add Movie" fx:id="btnAddMovie" />
-                    <Button text="Add Category" fx:id="btnAddCategory" />
-                    <Button text="Delete Category" fx:id="btnDeleteCategory" />
-                    <Button text="Close" fx:id="btnClose" />
+                <HBox alignment="CENTER" spacing="10">
+                    <Button fx:id="btnAddMovie" onAction="#btnAddMovieClicked" text="Add Movie" />
+                    <Button fx:id="btnAddCategory" onAction="#showAddPlaylistWindow" text="Add Category" />
+                    <Button fx:id="btnDeleteCategory" onAction="#showDeleteCategoryWindow" text="Delete Category" />
+                    <Button fx:id="btnClose" onAction="#btnCloseClicked" text="Close" />
                 </HBox>
             </VBox>
         </center>
 
     </BorderPane>
+
+    <!-- Pop-up for adding new Category -->
+    <VBox fx:id="popUpBg" opacity="0.7" prefHeight="500.0" prefWidth="1170.0" styleClass="popup-bg" visible="false" />
+    <VBox fx:id="popupVBoxCat" alignment="CENTER" maxHeight="150" maxWidth="450" prefHeight="150.0" prefWidth="450.0" styleClass="popup-vbox" visible="false">
+        <children>
+            <Label fx:id="lblPlaylistPopupTitle" styleClass="popup-title" text="Add/Edit Movie Category" />
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
+                <children>
+                    <TextField fx:id="txtNewCategory" prefWidth="200.0" promptText="Name of the category">
+                        <HBox.margin>
+                            <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                    </TextField>
+                    <Label text="Name">
+                        <HBox.margin>
+                            <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                    </Label>
+                </children>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="50.0" prefWidth="200.0">
+                <children>
+                    <Button mnemonicParsing="false" onAction="#hideAddPlaylistWindow" prefWidth="100.0" text="Cancel">
+                        <HBox.margin>
+                            <Insets right="20.0" />
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="btnSaveCategory" mnemonicParsing="false" onAction="#saveNewCategory" prefWidth="100.0" text="Save" textAlignment="RIGHT" />
+                </children>
+                <padding>
+                    <Insets left="200.0" />
+                </padding>
+            </HBox>
+        </children>
+    </VBox>
+
+
+    <!-- Pop-up for adding / editing movie -->
+
+    <VBox fx:id="popupNewMovie" maxHeight="400.0" maxWidth="500.0" prefHeight="400.0" prefWidth="500.0" styleClass="popup-vbox" visible="false">
+        <children>
+            <AnchorPane prefHeight="400.0" prefWidth="500.0">
+                <children>
+                    <Label layoutX="191.0" layoutY="14.0" styleClass="popup-title" text="New / Edit movie" />
+                    <Label layoutX="237.0" layoutY="108.0" text="Title" />
+                    <TextField fx:id="txtMovieTitle" layoutX="15.0" layoutY="105.0" maxHeight="0.0" prefHeight="0.0" prefWidth="200.0" promptText="Movie Title" />
+                    <TextField fx:id="txtImdb" layoutX="15.0" layoutY="138.0" maxHeight="0.0" prefHeight="0.0" prefWidth="200.0" promptText="IMDB rating" />
+                    <Label layoutX="235.0" layoutY="141.0" text="IMDB rating" />
+
+                    <TextField fx:id="txtUserScore" layoutX="15.0" layoutY="171.0" maxHeight="0.0" prefHeight="0.0" prefWidth="200.0" promptText="User rating" />
+                    <Label layoutX="235.0" layoutY="174.0" text="User rating" />
+
+
+                    <Label layoutX="235.0" layoutY="218.0" text="Categories" />
+                    <Label layoutX="235.0" layoutY="238.0" text="(To select more press CTRL or SHIFT while clicking)" />
+                    <ListView fx:id="categoriesListView" layoutX="15.0" layoutY="211.0" prefHeight="100" prefWidth="200">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+
+                            </FXCollections>
+                        </items>
+                    </ListView>
+                    <TextField fx:id="txtFilePath" layoutX="15.0" layoutY="69.0" prefWidth="200.0" />
+                    <Button fx:id="btnChoose" layoutX="231.0" layoutY="67.0" mnemonicParsing="false" onAction="#btnChooseClicked" prefWidth="100.0" text="Choose" />
+                    <Button fx:id="btnSaveMovie" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#saveMovie" prefWidth="100.0" text="Save" />
+                    <Button fx:id="btnCancelMovie" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideAddMovieWindow" prefWidth="100.0" text="Cancel" />
+                    <TextField fx:id="txtNewCategoryInMovie" layoutX="235.0" layoutY="174.0" prefWidth="200.0" promptText="Add new genre" visible="false" />
+                    <Button fx:id="btnAddCategoryInMovie" layoutX="233.0" layoutY="206.0" mnemonicParsing="false" prefWidth="100.0" text="Add" visible="false" />
+                </children>
+            </AnchorPane>
+        </children>
+    </VBox>
+
+    <!-- Pop-up for deleting category -->
+    <VBox fx:id="vbDeleteCategory" maxHeight="300" maxWidth="500" prefHeight="300.0" prefWidth="500.0" styleClass="popup-vbox" visible="false">
+        <children>
+            <Label styleClass="popup-title" text="Delete category" />
+            <ListView fx:id="lstCategoryDelete" prefHeight="200">
+            </ListView>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="50" prefWidth="500">
+                <Button fx:id="btnCancelDeleteCategory" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideDeleteCategoryWindow" prefWidth="100.0" text="Cancel">
+               <HBox.margin>
+                  <Insets bottom="10.0" />
+               </HBox.margin></Button>
+                <Button fx:id="btnDeleteCategoryPopUp" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#deleteCategoryConfirmation" prefWidth="100.0" text="Delete">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" />
+               </HBox.margin></Button>
+            </HBox>
+        </children>
+    </VBox>
+
+    <!-- Confirm you want to delete the movie -->
+    <VBox fx:id="popupDeleteCategoryConfirmation" alignment="TOP_CENTER" maxHeight="150.0" maxWidth="450.0" prefHeight="150.0" prefWidth="450.0" styleClass="popup-vbox" visible="false">
+        <children>
+            <Label styleClass="popup-title" text="Deleting" />
+            <Label fx:id="lblDeletingCategory" text="Are you sure you want to delete">
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+            </Label>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="20.0" prefWidth="300.0">
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+                <children>
+                    <Button fx:id="btnCancelDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#btnCancelDeleteCategoryClicked" prefWidth="100.0" text="Cancel">
+                        <HBox.margin>
+                            <Insets left="100.0" />
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="btnYesDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#btnYesDeleteCategoryClicked" prefWidth="100.0" text="Yes">
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                    </Button>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+
+    <!-- Confirm you want to delete the movie -->
+    <VBox fx:id="popupDeleteMovie" alignment="TOP_CENTER" maxHeight="150.0" maxWidth="450.0" prefHeight="150.0" prefWidth="450.0" styleClass="popup-vbox" visible="false">
+        <children>
+            <Label styleClass="popup-title" text="Deleting" />
+            <Label fx:id="lblDeletingMovie" text="Are you sure you want to delete">
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+            </Label>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="20.0" prefWidth="300.0">
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+                <children>
+                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" text="Deleting file as well">
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                    </CheckBox>
+                    <Button fx:id="btncancDelete" mnemonicParsing="false" onAction="#btnCancelDeleteMovieClicked" prefWidth="100.0" text="Cancel">
+                        <HBox.margin>
+                            <Insets left="100.0" />
+                        </HBox.margin>
+                    </Button>
+                    <Button fx:id="btnYesDelete" mnemonicParsing="false" onAction="#btnYesDeleteMovieClicked" prefWidth="100.0" text="Yes">
+                        <HBox.margin>
+                            <Insets left="10.0" />
+                        </HBox.margin>
+                    </Button>
+                </children>
+            </HBox>
+        </children>
+    </VBox>
 </StackPane>
