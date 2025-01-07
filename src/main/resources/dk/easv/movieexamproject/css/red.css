@@ -120,12 +120,12 @@
 }
 
 .popup-bg {
-    -fx-background-color: gray;
+    -fx-background-color: #141414;
     -fx-opacity: 0.45;
 }
 .popup-vbox {
-    -fx-background-color: gray;
-    -fx-border-color: black;
+    -fx-background-color: #141414;
+    -fx-border-color: #F0F0F0;
     -fx-border-width: 2px;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
