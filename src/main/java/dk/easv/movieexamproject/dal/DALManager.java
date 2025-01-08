@@ -86,4 +86,16 @@ public class DALManager
         }
         return categories;
     }
+
+    public void addCategory(String name) {
+        try (Connection con = connectionManager.getConnection()) {
+            String sqlcommandInsert = "INSERT INTO Category (name) VALUES (?)";
+            PreparedStatement pstmtInsert = con.prepareStatement(sqlcommandInsert);
+            pstmtInsert.setString(1, name);
+            pstmtInsert.execute();
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

@@ -39,4 +39,14 @@ public class BLLManager {
     public List<Category> getAllCategories() {
         return dalManager.getAllCategories();
     }
+
+    public void addCategory (String name) {
+        dalManager.addCategory(name);
+    }
+
+    public void refreshMovieList()
+    {
+        dalManager.retrieveMovie();
+    }
+
 }
