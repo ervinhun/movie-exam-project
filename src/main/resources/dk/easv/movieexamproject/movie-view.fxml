@@ -22,13 +22,18 @@
         <!-- Left Pane (Filters) -->
         <left>
             <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
-                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
+                <HBox alignment="TOP_CENTER">
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters">
+                  <HBox.margin>
+                     <Insets right="20.0" top="5.0" />
+                  </HBox.margin></Label>
+                    <Button fx:id="btnClear" onMouseClicked="#clearFilters" text="Clear" />
+                </HBox>
                 <HBox spacing="5">
                     <TextField fx:id="searchField" promptText="Search for title" />
                     <!--
                     <Button fx:id="btnSearch" text="Search" />
                     -->
-                    <Button fx:id="btnClear" onMouseClicked="#clearFilters" text="Clear" />
                 </HBox>
                 <Label fx:id="lblFilterCat" onMouseClicked="#openHideCategory" text="Category ▼" />
 
@@ -157,13 +162,15 @@
             </ListView>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="50" prefWidth="500">
                 <Button fx:id="btnCancelDeleteCategory" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideDeleteCategoryWindow" prefWidth="100.0" text="Cancel">
-               <HBox.margin>
-                  <Insets bottom="10.0" />
-               </HBox.margin></Button>
+                    <HBox.margin>
+                        <Insets bottom="10.0" />
+                    </HBox.margin>
+                </Button>
                 <Button fx:id="btnDeleteCategoryPopUp" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#deleteCategoryConfirmation" prefWidth="100.0" text="Delete">
-               <HBox.margin>
-                  <Insets bottom="10.0" left="20.0" right="10.0" />
-               </HBox.margin></Button>
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="10.0" />
+                    </HBox.margin>
+                </Button>
             </HBox>
         </children>
     </VBox>

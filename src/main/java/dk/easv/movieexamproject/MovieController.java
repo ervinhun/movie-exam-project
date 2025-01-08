@@ -3,6 +3,7 @@ package dk.easv.movieexamproject;
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
+import dk.easv.movieexamproject.dal.PlayingExt;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,12 +12,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MovieController implements Initializable {
@@ -49,6 +53,7 @@ public class MovieController implements Initializable {
     @FXML private Label lblDeletingCategory;
     @FXML private Button btnChoose;
     @FXML private TableView<Movie> moviesTable;
+    @FXML private TableColumn<Movie, Void> clmPlay;
     @FXML private TableColumn<Movie, String> clmTitle;
     @FXML private TableColumn<Movie, String> clmImdb;
     @FXML private TableColumn<Movie, String> clmUserRating;
@@ -63,6 +68,7 @@ public class MovieController implements Initializable {
     private static final String RATING_LABEL = "IMDB minimum rating ";
     private static final String UP_ARROW = "▲";
     private static final String DOWN_ARROW = "▼";
+    private ImageView playImage;
 
     private BLLManager manager;
 
@@ -81,6 +87,33 @@ public class MovieController implements Initializable {
     private void setUpMoviesTable()
     {
         moviesTable.setItems(items);
+        clmPlay.setCellFactory(column -> new TableCell<Movie, Void>() {
+            private final ImageView playImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/dk/easv/movieexamproject/img/play.png"))));
+
+            {
+                playImageView.setFitWidth(25);
+                playImageView.setFitHeight(25);
+                PlayingExt playMovie = new PlayingExt();
+                playImageView.setOnMouseClicked(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex()); // Get the movie from the row
+                    System.out.println(movie);
+                    if (movie != null)
+                        playMovie.PlayingExt(movie);
+                    else
+                        playMovie.PlayingExt();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(playImageView);
+                }
+            }
+        });
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         clmImdb.setCellValueFactory(new PropertyValueFactory<>("IMDB"));
         clmUserRating.setCellValueFactory(new PropertyValueFactory<>("userRating"));
