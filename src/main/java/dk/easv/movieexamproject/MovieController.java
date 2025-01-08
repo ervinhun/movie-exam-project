@@ -55,6 +55,7 @@ public class MovieController implements Initializable {
     @FXML private TableColumn<Movie, String> clmCategories;
     @FXML private TableColumn<Movie, String> clmLastView;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
+    ObservableList<Category> categories = FXCollections.observableArrayList();
 
     private ToggleGroup ratingGroup;
 
@@ -70,12 +71,13 @@ public class MovieController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //CreateImdbScore score = new CreateImdbScore(vBoxRating);
+        manager = new BLLManager(this);
         groupIMDBScore();
         setTestCategories();
+        categories.addAll(manager.getAllCategories());
         setCategories();
         setUpMoviesTable();
-        items.add(new Movie(1, "TEST", 3.0f, 4.0f, new String[] {"asd", "cat", "action"}, null, "asd"));
-        manager = new BLLManager(this);
+
     }
 
     private void setUpMoviesTable()
@@ -97,7 +99,7 @@ public class MovieController implements Initializable {
     }
 
     private void setCategories() {
-        for (Category category : categoryTestArrayList) {
+        for (Category category : categories) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(false);
             checkBox.setText(category.getName());

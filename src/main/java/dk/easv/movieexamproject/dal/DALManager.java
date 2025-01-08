@@ -1,5 +1,6 @@
 package dk.easv.movieexamproject.dal;
 
+import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
 
@@ -66,5 +67,23 @@ public class DALManager
         {
             e.printStackTrace();
         }
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList();
+        try (Connection con = connectionManager.getConnection()) {
+            String sqlcommandSelect = "SELECT * FROM Category";
+            PreparedStatement pstmtSelect = con.prepareStatement(sqlcommandSelect);
+            ResultSet rs = pstmtSelect.executeQuery();
+            while (rs.next()) {
+                categories.add(new Category(
+                        rs.getInt("id"),
+                        rs.getString("name"))
+                );
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return categories;
     }
 }
