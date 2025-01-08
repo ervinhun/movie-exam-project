@@ -3,16 +3,19 @@ package dk.easv.movieexamproject;
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -46,6 +49,11 @@ public class MovieController implements Initializable {
     @FXML private Label lblDeletingCategory;
     @FXML private Button btnChoose;
     @FXML private TableView<Movie> moviesTable;
+    @FXML private TableColumn<Movie, String> clmTitle;
+    @FXML private TableColumn<Movie, String> clmImdb;
+    @FXML private TableColumn<Movie, String> clmUserRating;
+    @FXML private TableColumn<Movie, String> clmCategories;
+    @FXML private TableColumn<Movie, String> clmLastView;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
 
     private ToggleGroup ratingGroup;
@@ -65,8 +73,22 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setTestCategories();
         setCategories();
-        moviesTable.setItems(items);
+        setUpMoviesTable();
+        items.add(new Movie(1, "TEST", 3.0f, 4.0f, new String[] {"asd", "cat", "action"}, null, "asd"));
         manager = new BLLManager(this);
+    }
+
+    private void setUpMoviesTable()
+    {
+        moviesTable.setItems(items);
+        clmTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        clmImdb.setCellValueFactory(new PropertyValueFactory<>("IMDB"));
+        clmUserRating.setCellValueFactory(new PropertyValueFactory<>("userRating"));
+        clmCategories.setCellValueFactory(cellData -> {
+            Movie movie = cellData.getValue();
+            return new SimpleStringProperty(String.join(", ", movie.getCategories()));
+        });
+        clmLastView.setCellValueFactory(new PropertyValueFactory<>("lastView"));
     }
 
     public void setMovie(Movie movie)

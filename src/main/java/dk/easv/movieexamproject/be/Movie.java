@@ -1,5 +1,8 @@
 package dk.easv.movieexamproject.be;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.sql.Date;
 
 public class Movie
@@ -12,6 +15,7 @@ public class Movie
     private Date lastView;
     private String fileLink;
 
+
     public Movie(int id, String title, float IMDB, float userRating, String[] categories, Date lastView, String fileLink)
     {
         this.id = id;
@@ -21,5 +25,30 @@ public class Movie
         this.categories = categories;
         this.lastView = lastView;
         this.fileLink = fileLink;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public float getIMDB()
+    {
+        return IMDB;
+    }
+
+    public float getUserRating()
+    {
+        return userRating;
+    }
+
+    public String[] getCategories()
+    {
+        return categories;
+    }
+
+    public Date getLastView()
+    {
+        return lastView;
     }
 }
