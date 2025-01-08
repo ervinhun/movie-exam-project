@@ -14,9 +14,10 @@ public class Movie
     private String[] categories;
     private Date lastView;
     private String fileLink;
+    private boolean favorite;
 
 
-    public Movie(int id, String title, float IMDB, float userRating, String[] categories, Date lastView, String fileLink)
+    public Movie(int id, String title, float IMDB, float userRating, String[] categories, Date lastView, String fileLink, boolean favorite)
     {
         this.id = id;
         this.title = title;
@@ -25,6 +26,7 @@ public class Movie
         this.categories = categories;
         this.lastView = lastView;
         this.fileLink = fileLink;
+        this.favorite = favorite;
     }
 
     public String getTitle()

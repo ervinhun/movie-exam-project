@@ -37,6 +37,8 @@ public class DALManager
                 float userRating = resultSet.getFloat("own_rating");
                 String fileLink = resultSet.getString("filelink");
                 Date lastView = resultSet.getDate("lastview");
+                Boolean favorite = resultSet.getBoolean("favorite");
+
 
                 List<String> categories = new ArrayList<>();
                 String categoryQuery =  "SELECT c.name FROM Category c " +
@@ -59,7 +61,7 @@ public class DALManager
                     e.printStackTrace();
                 }
 
-                Movie movie = new Movie(id, title, imdbRating, userRating, categories.toArray(new String[0]), lastView, fileLink);
+                Movie movie = new Movie(id, title, imdbRating, userRating, categories.toArray(new String[0]), lastView, fileLink, favorite);
                 bllManager.showMovie(movie);
             }
         }
@@ -90,6 +92,18 @@ public class DALManager
     public void addCategory(String name) {
         try (Connection con = connectionManager.getConnection()) {
             String sqlcommandInsert = "INSERT INTO Category (name) VALUES (?)";
+            PreparedStatement pstmtInsert = con.prepareStatement(sqlcommandInsert);
+            pstmtInsert.setString(1, name);
+            pstmtInsert.execute();
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void addMovie(String name) {
+        try (Connection con = connectionManager.getConnection()) {
+            String sqlcommandInsert = "INSERT INTO Movie (name) VALUES (?)";
             PreparedStatement pstmtInsert = con.prepareStatement(sqlcommandInsert);
             pstmtInsert.setString(1, name);
             pstmtInsert.execute();
