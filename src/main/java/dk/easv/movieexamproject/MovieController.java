@@ -1,7 +1,9 @@
 package dk.easv.movieexamproject;
 
 import dk.easv.movieexamproject.be.Category;
+import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,6 +45,8 @@ public class MovieController implements Initializable {
     @FXML private VBox popupDeleteCategoryConfirmation;
     @FXML private Label lblDeletingCategory;
     @FXML private Button btnChoose;
+    @FXML private TableView<Movie> moviesTable;
+    private ObservableList<Movie> items = FXCollections.observableArrayList();
 
     private ToggleGroup ratingGroup;
 
@@ -61,7 +65,13 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setTestCategories();
         setCategories();
-        manager = new BLLManager();
+        moviesTable.setItems(items);
+        manager = new BLLManager(this);
+    }
+
+    public void setMovie(Movie movie)
+    {
+        items.add(movie);
     }
 
     private void setCategories() {
