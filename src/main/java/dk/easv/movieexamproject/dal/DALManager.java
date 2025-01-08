@@ -33,9 +33,9 @@ public class DALManager
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("name");
                 float imdbRating = resultSet.getFloat("rating");
-                float userRating = resultSet.getFloat("userRating");
-                String fileLink = resultSet.getString("fileLink");
-                Date lastView = resultSet.getDate("lastView");
+                float userRating = resultSet.getFloat("own_rating");
+                String fileLink = resultSet.getString("filelink");
+                Date lastView = resultSet.getDate("lastview");
 
                 List<String> categories = new ArrayList<>();
                 String categoryQuery =  "SELECT c.name FROM Category c " +
