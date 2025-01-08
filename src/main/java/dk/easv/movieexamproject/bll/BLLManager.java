@@ -1,10 +1,13 @@
 package dk.easv.movieexamproject.bll;
 
 import dk.easv.movieexamproject.MovieController;
+import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.dal.ChooseFile;
 import dk.easv.movieexamproject.dal.DALManager;
 import javafx.stage.Window;
+
+import java.util.List;
 
 public class BLLManager {
 
@@ -32,4 +35,18 @@ public class BLLManager {
     {
         movieController.setMovie(movie);
     }
+
+    public List<Category> getAllCategories() {
+        return dalManager.getAllCategories();
+    }
+
+    public void addCategory (String name) {
+        dalManager.addCategory(name);
+    }
+
+    public void refreshMovieList()
+    {
+        dalManager.retrieveMovie();
+    }
+
 }

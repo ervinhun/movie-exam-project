@@ -55,10 +55,10 @@ public class MovieController implements Initializable {
     @FXML private TableColumn<Movie, String> clmCategories;
     @FXML private TableColumn<Movie, String> clmLastView;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
+    private ObservableList<Category> categories = FXCollections.observableArrayList();
 
     private ToggleGroup ratingGroup;
 
-    private ArrayList<Category> categoryTestArrayList;
     private static final String CATEGORY_LABEL = "Category ";
     private static final String RATING_LABEL = "IMDB minimum rating ";
     private static final String UP_ARROW = "▲";
@@ -70,12 +70,10 @@ public class MovieController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //CreateImdbScore score = new CreateImdbScore(vBoxRating);
+        manager = new BLLManager(this);
         groupIMDBScore();
-        setTestCategories();
         setCategories();
         setUpMoviesTable();
-        items.add(new Movie(1, "TEST", 3.0f, 4.0f, new String[] {"asd", "cat", "action"}, null, "asd"));
-        manager = new BLLManager(this);
     }
 
     private void setUpMoviesTable()
@@ -97,7 +95,8 @@ public class MovieController implements Initializable {
     }
 
     private void setCategories() {
-        for (Category category : categoryTestArrayList) {
+        categories.addAll(manager.getAllCategories());
+        for (Category category : categories) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(false);
             checkBox.setText(category.getName());
@@ -105,26 +104,6 @@ public class MovieController implements Initializable {
             lstCategory.getItems().add(checkBox);
 
         }
-    }
-
-    private void setTestCategories() {
-        categoryTestArrayList = new ArrayList<>();
-        Category cat = new Category(1, "Action");
-        categoryTestArrayList.add(cat);
-        cat = new Category(2, "Comedy");
-        categoryTestArrayList.add(cat);
-        cat = new Category(3, "Fantasy");
-        categoryTestArrayList.add(cat);
-        cat = new Category(4, "Horror");
-        categoryTestArrayList.add(cat);
-        cat = new Category(5, "Science Fiction");
-        categoryTestArrayList.add(cat);
-        cat = new Category(6, "Thriller");
-        categoryTestArrayList.add(cat);
-        cat = new Category(7, "Documentary");
-        categoryTestArrayList.add(cat);
-        cat = new Category(8, "Animation");
-        categoryTestArrayList.add(cat);
     }
 
     private void groupIMDBScore() {
@@ -141,7 +120,7 @@ public class MovieController implements Initializable {
 
     private void populateCategories() {
         categoriesListView.getItems().clear();
-        for (Category category : categoryTestArrayList) {
+        for (Category category : categories) {
             categoriesListView.getItems().add(category);
         }
         categoriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -165,17 +144,19 @@ public class MovieController implements Initializable {
     }
 
 
-
     @FXML private void saveNewCategory() {
-        System.out.println("In the future saving: " + txtNewCategory.getText());
-        int lastID = categoryTestArrayList.getLast().getId();
-        Category newCat = new Category(lastID+1, txtNewCategory.getText());
-        categoryTestArrayList.add(newCat);
+        manager.addCategory(txtNewCategory.getText());
         CheckBox checkBox = new CheckBox();
-        checkBox.setText(newCat.getName());
         lstCategory.getItems().add(checkBox);
         hideAddPlaylistWindow();
     }
+
+    private void refreshMovies()
+    {
+        items.clear();
+        manager.refreshMovieList();
+    }
+
 
     @FXML private void openHideCategory() {
         lstCategory.setVisible(!lstCategory.isVisible());
@@ -227,7 +208,7 @@ public class MovieController implements Initializable {
     public void btnYesDeleteCategoryClicked() {
         Category category = lstCategoryDelete.getSelectionModel().getSelectedItem();
         System.out.println("Will delete " + category.getName());
-        categoryTestArrayList.remove(category);
+        categories.remove(category);
         lstCategory.getItems().removeIf(checkBox -> checkBox.getText().equals(category.getName()));
         hideDeleteCategoryConfirmationWindow();
         hideDeleteCategoryWindow();
@@ -265,7 +246,7 @@ public class MovieController implements Initializable {
         popUpBg.setVisible(true);
         vbDeleteCategory.setVisible(true);
         lstCategoryDelete.getItems().clear();
-        lstCategoryDelete.getItems().addAll(categoryTestArrayList);
+        lstCategoryDelete.getItems().addAll(categories);
     }
 
     public void hideDeleteCategoryWindow() {
