@@ -60,4 +60,8 @@ public class Movie
     public String getFileLink() {
         return this.fileLink;
     }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
 }

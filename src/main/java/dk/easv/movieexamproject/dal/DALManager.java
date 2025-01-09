@@ -216,4 +216,43 @@ public class DALManager
             ex.printStackTrace();
         }
     }
-}
+
+    public boolean checkIfFavorite(Movie movie) {
+        try (Connection con = connectionManager.getConnection()) {
+            String SQLSelect = "SELECT favorite FROM Movie WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQLSelect);
+            pstmt.setInt(1, movie.getId());
+
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean("favorite");
+            } else {
+                throw new SQLException("Movie with ID " + movie.getId() + " not found.");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Error checking if movie is favorite", ex);
+        }
+    }
+
+    public void toggleFavorite(Movie movie) {
+        try (Connection con = connectionManager.getConnection()) {
+            String SQLSelect;
+
+            if (!checkIfFavorite(movie)) {
+                SQLSelect = "UPDATE Movie SET favorite = 1 WHERE id = ?";
+            } else {
+                SQLSelect = "UPDATE Movie SET favorite = 0 WHERE id = ?";
+            }
+
+            PreparedStatement pstmt = con.prepareStatement(SQLSelect);
+            pstmt.setInt(1, movie.getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    }

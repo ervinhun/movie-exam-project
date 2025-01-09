@@ -72,4 +72,8 @@ public class BLLManager {
     public void updateLastView(Movie movie) {
         dalManager.updateLastView(movie);
     }
+
+    public void toggleFavorite(Movie movie) {
+        dalManager.toggleFavorite(movie);
+    }
 }
