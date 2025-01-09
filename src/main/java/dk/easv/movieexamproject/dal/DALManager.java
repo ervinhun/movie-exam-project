@@ -84,7 +84,7 @@ public class DALManager
                 );
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
         return categories;
     }
@@ -97,7 +97,7 @@ public class DALManager
             pstmtInsert.execute();
 
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -109,7 +109,7 @@ public class DALManager
             pstmtInsert.execute();
 
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
     }
 }

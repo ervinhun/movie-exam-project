@@ -6,6 +6,7 @@ import dk.easv.movieexamproject.bll.BLLManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,9 +56,10 @@ public class MovieController implements Initializable {
     @FXML private TableColumn<Movie, String> clmCategories;
     @FXML private TableColumn<Movie, String> clmLastView;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
+    private FilteredList<Movie> filteredItems = new FilteredList<>(items);
     private ObservableList<Category> categories = FXCollections.observableArrayList();
 
-    private ToggleGroup ratingGroup;
+    private final ToggleGroup ratingGroup = new ToggleGroup();
 
     private static final String CATEGORY_LABEL = "Category ";
     private static final String RATING_LABEL = "IMDB minimum rating ";
@@ -74,11 +76,12 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setCategories();
         setUpMoviesTable();
+        items.add(new Movie(1, "TEST", 2.0f, 3.0f, new String[] {"asdd", "categ"}, null, "link", true));
     }
 
     private void setUpMoviesTable()
     {
-        moviesTable.setItems(items);
+        moviesTable.setItems(filteredItems);
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         clmImdb.setCellValueFactory(new PropertyValueFactory<>("IMDB"));
         clmUserRating.setCellValueFactory(new PropertyValueFactory<>("userRating"));
@@ -106,16 +109,13 @@ public class MovieController implements Initializable {
         }
     }
 
-    private void groupIMDBScore() {
-        ratingGroup = new ToggleGroup();
-        radio2.setToggleGroup(ratingGroup);
-        radio3.setToggleGroup(ratingGroup);
-        radio4.setToggleGroup(ratingGroup);
-        radio5.setToggleGroup(ratingGroup);
-        radio6.setToggleGroup(ratingGroup);
-        radio7.setToggleGroup(ratingGroup);
-        radio8.setToggleGroup(ratingGroup);
-        radio9.setToggleGroup(ratingGroup);
+    private void groupIMDBScore()
+    {
+        RadioButton[] radioButtons = {radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9};
+        for (RadioButton radioButton : radioButtons)
+        {
+            radioButton.setToggleGroup(ratingGroup);
+        }
     }
 
     private void populateCategories() {
@@ -126,6 +126,30 @@ public class MovieController implements Initializable {
         categoriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    @FXML private void addFilters()
+    {
+        String searchText;
+        int IMDBRating;
+
+        if(!searchField.getText().isEmpty())
+        {
+            searchText = searchField.getText().toLowerCase();
+        }
+        else searchText = "";
+
+        if(ratingGroup.getSelectedToggle() != null)
+        {
+            ToggleButton button = (ToggleButton) ratingGroup.getSelectedToggle();
+            IMDBRating = Integer.parseInt(button.getText());
+        }
+        else IMDBRating = -1;
+
+        filteredItems.setPredicate(movie -> {
+            boolean matchesTitle = searchText.isEmpty() || movie.getTitle().toLowerCase().startsWith(searchText);
+            boolean matchesRating = IMDBRating == -1 || movie.getIMDB() == IMDBRating;
+            return matchesTitle && matchesRating;
+        });
+    }
 
     //Button clicks
     @FXML private void btnAddMovieClicked() {
@@ -178,6 +202,7 @@ public class MovieController implements Initializable {
     }
 @FXML private void clearFilters() {
         searchField.clear();
+        filteredItems.setPredicate(null);
         if (ratingGroup.getSelectedToggle() != null) {
             ratingGroup.getSelectedToggle().setSelected(false);
         }

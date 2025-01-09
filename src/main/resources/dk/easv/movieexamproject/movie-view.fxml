@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="500.0" prefWidth="1170.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
+<StackPane prefHeight="500.0" prefWidth="1170.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
@@ -24,7 +24,7 @@
             <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
                 <HBox spacing="5">
-                    <TextField fx:id="searchField" promptText="Search for title" />
+                    <TextField fx:id="searchField" onKeyTyped="#addFilters" promptText="Search for title" />
                     <!--
                     <Button fx:id="btnSearch" text="Search" />
                     -->
@@ -37,14 +37,14 @@
                 <Label fx:id="lblFilterRating" onMouseClicked="#openHideRating" text="IMDB minimum rating ▼" />
 
                 <VBox fx:id="vBoxRating" managed="false" spacing="5" visible="false">
-                    <RadioButton fx:id="radio2" text="2" />
-                    <RadioButton fx:id="radio3" text="3" />
-                    <RadioButton fx:id="radio4" text="4" />
-                    <RadioButton fx:id="radio5" text="5" />
-                    <RadioButton fx:id="radio6" text="6" />
-                    <RadioButton fx:id="radio7" text="7" />
-                    <RadioButton fx:id="radio8" text="8" />
-                    <RadioButton fx:id="radio9" text="9" />
+                    <RadioButton fx:id="radio2" onAction="#addFilters" text="2" />
+                    <RadioButton fx:id="radio3" onAction="#addFilters" text="3" />
+                    <RadioButton fx:id="radio4" onAction="#addFilters" text="4" />
+                    <RadioButton fx:id="radio5" onAction="#addFilters" text="5" />
+                    <RadioButton fx:id="radio6" onAction="#addFilters" text="6" />
+                    <RadioButton fx:id="radio7" onAction="#addFilters" text="7" />
+                    <RadioButton fx:id="radio8" onAction="#addFilters" text="8" />
+                    <RadioButton fx:id="radio9" onAction="#addFilters" text="9" />
                 </VBox>
                 <Button fx:id="btnApplyFilter" text="Apply filters" />
             </VBox>
