@@ -135,4 +135,58 @@ public class DALManager
             ex.printStackTrace();
         }
     }
+
+
+    public List<Movie> getMoviesToNotify() {
+        List<Movie> moviesToNotify = new ArrayList<>();
+        String sql = """
+        SELECT * 
+        FROM Movie
+        WHERE own_rating < 6 
+           OR lastview IS NULL 
+           OR DATEDIFF(YEAR, lastview, GETDATE()) >= 2
+    """;
+
+        try (Connection conn = connectionManager.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery())
+        {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("name");
+                float imdbRating = rs.getFloat("rating");
+                float userRating = rs.getFloat("own_rating");
+                String fileLink = rs.getString("filelink");
+                Date lastView = rs.getDate("lastview");
+                boolean favorite = rs.getBoolean("favorite");
+
+                // Retrieve categories for the current movie:
+                List<String> categories = new ArrayList<>();
+                String catQuery = """
+                SELECT c.name 
+                FROM Category c 
+                JOIN CatMovie cm ON cm.CategoryId = c.id 
+                WHERE cm.MovieId = ?
+            """;
+                try (PreparedStatement catStmt = conn.prepareStatement(catQuery)) {
+                    catStmt.setInt(1, id);
+                    try (ResultSet catRs = catStmt.executeQuery()) {
+                        while (catRs.next()) {
+                            categories.add(catRs.getString("name"));
+                        }
+                    }
+                }
+
+                Movie movie = new Movie(
+                        id, title, imdbRating, userRating,
+                        categories.toArray(new String[0]),
+                        lastView, fileLink, favorite
+                );
+                moviesToNotify.add(movie);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return moviesToNotify;
+    }
 }
