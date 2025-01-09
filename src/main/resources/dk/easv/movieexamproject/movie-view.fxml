@@ -15,13 +15,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <StackPane prefHeight="500.0" prefWidth="1300.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
         <left>
-            <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;" prefWidth="240">
+            <VBox alignment="TOP_LEFT" prefWidth="240" spacing="10" style="-fx-padding: 10;">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
                 <HBox spacing="5">
                     <TextField fx:id="searchField" onKeyTyped="#addFilters" promptText="Search for title" />
@@ -167,7 +168,7 @@
         </children>
     </VBox>
 
-    <!-- Confirm you want to delete the movie -->
+    <!-- Confirm you want to delete the category -->
     <VBox fx:id="popupDeleteCategoryConfirmation" alignment="TOP_CENTER" maxHeight="150.0" maxWidth="450.0" prefHeight="150.0" prefWidth="450.0" styleClass="popup-vbox" visible="false">
         <children>
             <Label styleClass="popup-title" text="Deleting" />
@@ -210,7 +211,7 @@
                     <Insets top="20.0" />
                 </VBox.margin>
                 <children>
-                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" text="Deleting file as well">
+                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" prefWidth="150" text="Deleting file">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
@@ -229,4 +230,33 @@
             </HBox>
         </children>
     </VBox>
+   <VBox fx:id="popupMovieWarning" alignment="TOP_CENTER" layoutX="435.0" layoutY="185.0" maxHeight="250.0" maxWidth="450.0" prefHeight="250.0" prefWidth="450.0" styleClass="popup-vbox" visible="false">
+      <children>
+         <Label styleClass="popup-title" text="Warning">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </Label>
+         <Label fx:id="lblMovieWarning" text="These movies have not been watched for over 2 years">
+            <VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+         </Label>
+          <Label fx:id="lblMovieWarning2" text="or rating is less than 6:" />
+
+         <ListView fx:id="lstWarningWindow" prefHeight="200.0" prefWidth="200.0" />
+         <HBox alignment="BOTTOM_RIGHT" prefHeight="20.0" prefWidth="300.0">
+            <VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+            <children>
+               <Button fx:id="btnWarningOK" mnemonicParsing="false" onAction="#btnWarningOkClicked" prefWidth="100.0" text="Ok">
+                  <HBox.margin>
+                     <Insets left="10.0" />
+                  </HBox.margin>
+               </Button>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
 </StackPane>

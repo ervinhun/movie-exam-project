@@ -6,6 +6,7 @@ import dk.easv.movieexamproject.bll.BLLManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class DALManager
@@ -134,5 +135,10 @@ public class DALManager
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public Collection<? extends Movie> getOldMovies() {
+        //TODO: DB query for old movies
+        return null;
     }
 }

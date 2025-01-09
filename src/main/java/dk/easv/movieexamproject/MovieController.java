@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,6 +66,12 @@ public class MovieController implements Initializable {
     @FXML private TableColumn<Movie, String> clmLastView;
     @FXML private TableColumn<Movie, Void> clmControl;
     @FXML private Button btnSaveMovie;
+    @FXML private VBox popupDeleteMovie;
+    @FXML private Label lblDeletingMovie;
+    @FXML private VBox popupMovieWarning;
+    @FXML private Label lblMovieWarning;
+    @FXML private ListView<Movie> lstWarningWindow;
+
     private ObservableList<Movie> items = FXCollections.observableArrayList();
     private FilteredList<Movie> filteredItems = new FilteredList<>(items);
     private ObservableList<Category> categories = FXCollections.observableArrayList();
@@ -77,6 +82,7 @@ public class MovieController implements Initializable {
     private static final String RATING_LABEL = "IMDB minimum rating ";
     private static final String UP_ARROW = "▲";
     private static final String DOWN_ARROW = "▼";
+    private static final String DELETING_MOVIE_LABEL = "Are you sure you want to delete ";
 
     private BLLManager manager;
 
@@ -88,6 +94,7 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setCategories();
         setUpMoviesTable();
+        checkForWarning();
     }
 
     private void setUpMoviesTable()
@@ -153,6 +160,12 @@ public class MovieController implements Initializable {
                         editMovie(movie);
                     }
                 });
+                deleteButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        deleteMoviePopUp(movie);
+                    }
+                });
 
                 userRatingButton.setOnAction(event -> {
                     Movie movie = getTableView().getItems().get(getIndex());
@@ -187,6 +200,8 @@ public class MovieController implements Initializable {
             }
         });
     }
+
+
 
 
     private void editMovie(Movie movie) {
@@ -300,6 +315,14 @@ public class MovieController implements Initializable {
         });
     }
 
+    private void checkForWarning() {
+        ArrayList<Movie> warningMovies = new ArrayList<>();
+        warningMovies = manager.getWarning();
+        if (warningMovies != null && !warningMovies.isEmpty()) {
+            showWarningWindow(warningMovies);
+        }
+    }
+
     //Button clicks
     @FXML private void btnAddMovieClicked() {
         showAddMovieWindow();
@@ -387,20 +410,19 @@ public class MovieController implements Initializable {
         stage.close();
     }
 
-    public void btnCancelDeleteMovieClicked(ActionEvent event) {
+    @FXML private void btnCancelDeleteMovieClicked(ActionEvent event) {
+        hideDeleteMoviePopUp();
     }
 
-    public void btnYesDeleteMovieClicked(ActionEvent event) {
+    @FXML private void btnYesDeleteMovieClicked(ActionEvent event) {
     }
 
 
-    public void btnCancelDeleteCategoryClicked(ActionEvent event) {
+    @FXML private void btnCancelDeleteCategoryClicked(ActionEvent event) {
         hideDeleteCategoryConfirmationWindow();
     }
 
-
-
-    public void btnYesDeleteCategoryClicked() {
+    @FXML private void btnYesDeleteCategoryClicked() {
         Category category = lstCategoryDelete.getSelectionModel().getSelectedItem();
         System.out.println("Will delete " + category.getName());
         categories.remove(category);
@@ -408,7 +430,12 @@ public class MovieController implements Initializable {
         hideDeleteCategoryConfirmationWindow();
         hideDeleteCategoryWindow();
     }
-
+    @FXML private void btnCancelDeleteMovieClicked() {
+        hideDeleteMoviePopUp();
+    }
+    @FXML private void btnWarningOkClicked() {
+        hideWarningWindow();
+    }
 
 
 
@@ -471,5 +498,24 @@ public class MovieController implements Initializable {
             if (filepath != null) {
                 txtFilePath.setText(filepath);
             }
+    }
+    private void deleteMoviePopUp(Movie movie) {
+        popUpBg.setVisible(true);
+        popupDeleteMovie.setVisible(true);
+        lblDeletingMovie.setText(DELETING_MOVIE_LABEL + movie.getTitle());
+    }
+    private void hideDeleteMoviePopUp() {
+        lblDeletingMovie.setText(DELETING_MOVIE_LABEL);
+        popupDeleteMovie.setVisible(false);
+        popUpBg.setVisible(false);
+    }
+    private void showWarningWindow(ArrayList<Movie> warningMovies) {
+        popUpBg.setVisible(true);
+        popupMovieWarning.setVisible(true);
+        lstWarningWindow.getItems().addAll(warningMovies);
+    }
+    private void hideWarningWindow() {
+        popUpBg.setVisible(false);
+        popupMovieWarning.setVisible(false);
     }
 }

@@ -7,6 +7,7 @@ import dk.easv.movieexamproject.dal.ChooseFile;
 import dk.easv.movieexamproject.dal.DALManager;
 import javafx.stage.Window;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BLLManager {
@@ -51,6 +52,13 @@ public class BLLManager {
 
     public void addMovie(String name, float IMDB, float userRating, int[] categories, String fileLink, boolean favorite) {
         dalManager.addMovie(name, IMDB, userRating, categories, fileLink, favorite);
+    }
+    public ArrayList<Movie> getWarning() {
+        if (dalManager.getOldMovies() != null && dalManager.getOldMovies().size() > 0) {
+            ArrayList<Movie> warning = new ArrayList<>(dalManager.getOldMovies());
+            return warning;
+        }
+        else return null;
     }
 
 }
