@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="500.0" prefWidth="1170.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
+<StackPane prefHeight="500.0" prefWidth="1300.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
@@ -66,7 +66,7 @@
                         <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" />
                         <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" />
                         <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" />
-                        <TableColumn fx:id="clmControl" prefWidth="100" />
+                        <TableColumn fx:id="clmControl" prefWidth="250" />
                     </columns>
                 </TableView>
 
@@ -143,7 +143,7 @@
                             </FXCollections>
                         </items>
                     </ListView>
-                    <TextField fx:id="txtFilePath" layoutX="15.0" layoutY="69.0" prefWidth="200.0" />
+                    <TextField fx:id="txtFilePath" disable="true" layoutX="15.0" layoutY="69.0" prefWidth="200.0" />
                     <Button fx:id="btnChoose" layoutX="231.0" layoutY="67.0" mnemonicParsing="false" onAction="#btnChooseClicked" prefWidth="100.0" text="Choose" />
                     <Button fx:id="btnSaveMovie" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#saveMovie" prefWidth="100.0" text="Save" />
                     <Button fx:id="btnCancelMovie" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideAddMovieWindow" prefWidth="100.0" text="Cancel" />

@@ -137,3 +137,35 @@
     -font-weight: bold;
     -fx-font-size: 12px;
 }
+
+
+#playButton {
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-border-radius: 0;
+    -fx-background-radius: 5;
+    -fx-background-image: url('/dk/easv/movieexamproject/img/play.png');
+    -fx-background-position: center;
+    -fx-background-size: cover;
+}
+#editButton, #userRatingButton, #deleteButton, #favoriteButton {
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-position: center;
+    -fx-background-size: cover;
+}
+
+#editButton {
+    -fx-background-image: url('/dk/easv/movieexamproject/img/edit.png');
+}
+#userRatingButton {
+    -fx-background-image: url('/dk/easv/movieexamproject/img/person.png');
+}
+#deleteButton {
+    -fx-background-image: url('/dk/easv/movieexamproject/img/delete.png');
+}
+#favoriteButton {
+    -fx-background-image: url('/dk/easv/movieexamproject/img/fav0.png');
+}

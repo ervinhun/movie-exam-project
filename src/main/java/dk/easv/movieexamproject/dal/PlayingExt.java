@@ -21,6 +21,7 @@ public class PlayingExt {
     }
 
     public void PlayingExt (Movie movie) {
+        //TODO: Update DB lastView
         openDesktopPlayer(movie);
     }
 
