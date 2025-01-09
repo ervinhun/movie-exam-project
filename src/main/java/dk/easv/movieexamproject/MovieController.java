@@ -439,10 +439,12 @@ public class MovieController implements Initializable {
     @FXML private void btnYesDeleteCategoryClicked() {
         Category category = lstCategoryDelete.getSelectionModel().getSelectedItem();
         System.out.println("Will delete " + category.getName());
+        manager.deleteCategory(category);
         categories.remove(category);
         lstCategory.getItems().removeIf(checkBox -> checkBox.getText().equals(category.getName()));
         hideDeleteCategoryConfirmationWindow();
         hideDeleteCategoryWindow();
+        refreshMovies();
     }
     @FXML private void btnCancelDeleteMovieClicked() {
         hideDeleteMoviePopUp();

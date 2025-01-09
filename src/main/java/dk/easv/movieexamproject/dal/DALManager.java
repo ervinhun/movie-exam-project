@@ -254,5 +254,18 @@ public class DALManager
         }
     }
 
-
+    public void deleteCategory(Category category) {
+        try (Connection con = connectionManager.getConnection()) {
+            String sqlcommandInsert = "DELETE FROM CatMovie WHERE CategoryId = ?";
+            PreparedStatement pstmtSelect = con.prepareStatement(sqlcommandInsert);
+            pstmtSelect.setInt(1, category.getId());
+            pstmtSelect.execute();
+            sqlcommandInsert = "DELETE FROM Category WHERE id = ?";
+            pstmtSelect = con.prepareStatement(sqlcommandInsert);
+            pstmtSelect.setInt(1, category.getId());
+            pstmtSelect.execute();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
     }
