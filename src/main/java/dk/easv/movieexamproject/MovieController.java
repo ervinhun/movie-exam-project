@@ -282,7 +282,7 @@ public class MovieController implements Initializable {
 
     private void populateCategories() {
         categoriesListView.getItems().clear();
-        for (Category category : categories) {
+        for (Category category : manager.getAllCategories()) {
             categoriesListView.getItems().add(category);
         }
         categoriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

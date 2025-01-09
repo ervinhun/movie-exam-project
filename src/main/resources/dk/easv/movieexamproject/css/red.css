@@ -169,6 +169,9 @@
 #favoriteButton {
     -fx-background-image: url('/dk/easv/movieexamproject/img/fav0.png');
 }
+#favoriteTrueButton {
+    -fx-background-image: url('/dk/easv/movieexamproject/img/fav1.png');
+}
 .dialog-pane .header-panel { /* Changed style: Dark background for the alert's header section */
     -fx-background-color: #141414;
     -fx-text-fill: #ffffff;
