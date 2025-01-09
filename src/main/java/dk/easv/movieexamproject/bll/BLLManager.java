@@ -76,4 +76,8 @@ public class BLLManager {
     public void toggleFavorite(Movie movie) {
         dalManager.toggleFavorite(movie);
     }
+
+    public void deleteCategory(Category category) {
+        dalManager.deleteCategory(category);
+    }
 }
