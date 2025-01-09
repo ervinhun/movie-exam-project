@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MovieController implements Initializable {
+    @FXML private CheckBox cbFavourite;
     @FXML private VBox vBoxRating;
     @FXML private ListView<CheckBox> lstCategory;
     @FXML private RadioButton radio2;
@@ -93,6 +94,7 @@ public class MovieController implements Initializable {
         manager = new BLLManager(this);
         groupIMDBScore();
         setCategories();
+        setFavorite();
         setUpMoviesTable();
         checkObsoleteMovies();
     }
@@ -264,6 +266,11 @@ public class MovieController implements Initializable {
         }
     }
 
+    private void setFavorite() {
+        cbFavourite.setSelected(false);
+        cbFavourite.setOnAction(_ -> addFavoriteFilter());
+    }
+
     private void groupIMDBScore()
     {
         RadioButton[] radioButtons = {radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9};
@@ -316,6 +323,14 @@ public class MovieController implements Initializable {
             boolean matchesCategories = selectedCategories.isEmpty() || selectedCategories.stream().allMatch(movieCategories::contains);
             return matchesTitle && matchesRating && matchesCategories;
         });
+    }
+
+    private void addFavoriteFilter() {
+        if (cbFavourite.isSelected()) {
+            filteredItems.setPredicate(movie -> movie.isFavorite());
+        } else {
+            filteredItems.setPredicate(movie -> true);
+        }
     }
 
     //Button clicks
