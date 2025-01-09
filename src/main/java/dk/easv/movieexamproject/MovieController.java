@@ -293,6 +293,7 @@ public class MovieController implements Initializable {
         String searchText;
         int IMDBRating;
         List<String> selectedCategories = new ArrayList<>();
+        boolean favoriteFilter = cbFavourite.isSelected();
 
         if(!searchField.getText().isEmpty())
         {
@@ -321,16 +322,13 @@ public class MovieController implements Initializable {
             boolean matchesRating = IMDBRating == -1 || movie.getIMDB() >= IMDBRating;
             List<String> movieCategories = Arrays.asList(movie.getCategories());
             boolean matchesCategories = selectedCategories.isEmpty() || selectedCategories.stream().allMatch(movieCategories::contains);
-            return matchesTitle && matchesRating && matchesCategories;
+            boolean matchesFavorite = !favoriteFilter || movie.isFavorite();
+            return matchesTitle && matchesRating && matchesCategories && matchesFavorite;
         });
     }
 
     private void addFavoriteFilter() {
-        if (cbFavourite.isSelected()) {
-            filteredItems.setPredicate(movie -> movie.isFavorite());
-        } else {
-            filteredItems.setPredicate(movie -> true);
-        }
+        addFilters();
     }
 
     //Button clicks
