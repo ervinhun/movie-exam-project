@@ -178,7 +178,7 @@ public class MovieController implements Initializable {
                 favoriteButton.setOnAction(event -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
-                        //toggleFavorite(movie);
+                        toggleFavorite(movie);
                     }
                 });
 
@@ -188,6 +188,10 @@ public class MovieController implements Initializable {
                         openImdbPage(movie);
                     }
                 });
+            }
+
+            public void toggleFavorite(Movie movie) {
+                manager.toggleFavorite(movie);
             }
 
             @Override
