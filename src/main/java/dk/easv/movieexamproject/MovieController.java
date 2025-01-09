@@ -69,15 +69,13 @@ public class MovieController implements Initializable {
     @FXML private Button btnSaveMovie;
     @FXML private VBox popupDeleteMovie;
     @FXML private Label lblDeletingMovie;
-    @FXML private VBox popupMovieWarning;
-    @FXML private Label lblMovieWarning;
-    @FXML private ListView<Movie> lstWarningWindow;
-
+    @FXML private CheckBox cbDeleteFile;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
     private FilteredList<Movie> filteredItems = new FilteredList<>(items);
     private ObservableList<Category> categories = FXCollections.observableArrayList();
 
     private final ToggleGroup ratingGroup = new ToggleGroup();
+    private Movie movieToDelete;
 
     private static final String CATEGORY_LABEL = "Category ";
     private static final String RATING_LABEL = "IMDB minimum rating ";
@@ -91,6 +89,7 @@ public class MovieController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //CreateImdbScore score = new CreateImdbScore(vBoxRating);
+        movieToDelete = null;
         manager = new BLLManager(this);
         groupIMDBScore();
         setCategories();
@@ -406,6 +405,12 @@ public class MovieController implements Initializable {
     }
 
     @FXML private void btnYesDeleteMovieClicked(ActionEvent event) {
+        Boolean fileDelete = cbDeleteFile.isSelected();
+        if (movieToDelete != null) {
+            manager.deleteMovie(movieToDelete, fileDelete);
+            items.remove(movieToDelete);
+            hideDeleteMoviePopUp();
+        }
     }
 
 
@@ -511,6 +516,7 @@ public class MovieController implements Initializable {
         popUpBg.setVisible(true);
         popupDeleteMovie.setVisible(true);
         lblDeletingMovie.setText(DELETING_MOVIE_LABEL + movie.getTitle());
+        movieToDelete = movie;
     }
     private void hideDeleteMoviePopUp() {
         lblDeletingMovie.setText(DELETING_MOVIE_LABEL);

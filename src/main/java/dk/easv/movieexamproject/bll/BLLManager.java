@@ -5,6 +5,7 @@ import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.dal.ChooseFile;
 import dk.easv.movieexamproject.dal.DALManager;
+import dk.easv.movieexamproject.dal.DeleteFile;
 import javafx.stage.Window;
 
 import java.util.List;
@@ -55,4 +56,16 @@ public class BLLManager {
     public List<Movie> getMoviesToNotify() {return dalManager.getMoviesToNotify();}
 
 
+    public void deleteMovie(Movie movieToDelete, Boolean fileDelete) {
+        if (fileDelete) {
+            DeleteFile delete = new DeleteFile();
+            try {
+                delete.deleteFile(movieToDelete.getFileLink());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        dalManager.deleteMovie(movieToDelete);
+    }
 }
