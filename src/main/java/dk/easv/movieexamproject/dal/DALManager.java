@@ -19,6 +19,21 @@ public class DALManager
         this.bllManager = bllManager;
     }
 
+    public void deleteMovie(Movie movieToDelete) {
+        try (Connection con = connectionManager.getConnection()) {
+            String sqlcommandInsert = "DELETE FROM CatMovie WHERE MovieId = ?";
+            PreparedStatement pstmtSelect = con.prepareStatement(sqlcommandInsert);
+            pstmtSelect.setInt(1, movieToDelete.getId());
+            pstmtSelect.execute();
+            sqlcommandInsert = "DELETE FROM Movie WHERE id = ?";
+            pstmtSelect = con.prepareStatement(sqlcommandInsert);
+            pstmtSelect.setInt(1, movieToDelete.getId());
+            pstmtSelect.execute();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public void retrieveMovie()
     {
         String query = "SELECT * FROM Movie";

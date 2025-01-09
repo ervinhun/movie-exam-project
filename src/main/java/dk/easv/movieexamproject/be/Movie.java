@@ -28,6 +28,9 @@ public class Movie
         this.fileLink = fileLink;
         this.favorite = favorite;
     }
+    public int getId() {
+        return id;
+    }
 
     public String getTitle()
     {
