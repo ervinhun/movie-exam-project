@@ -204,4 +204,16 @@ public class DALManager
         }
         return moviesToNotify;
     }
+
+    public void updateLastView(Movie movie) {
+        try (Connection con = connectionManager.getConnection()) {
+            String SQLSelect = "UPDATE Movie SET lastview = CONVERT (date, GETDATE()) WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQLSelect);
+            pstmt.setInt(1, movie.getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

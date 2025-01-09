@@ -68,4 +68,8 @@ public class BLLManager {
         }
         dalManager.deleteMovie(movieToDelete);
     }
+
+    public void updateLastView(Movie movie) {
+        dalManager.updateLastView(movie);
+    }
 }

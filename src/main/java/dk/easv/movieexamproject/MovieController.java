@@ -111,6 +111,7 @@ public class MovieController implements Initializable {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         playMovie.PlayingExt(movie);
+                        manager.updateLastView(movie);
                     }
                 });
             }
