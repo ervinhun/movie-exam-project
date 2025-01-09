@@ -88,6 +88,7 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setCategories();
         setUpMoviesTable();
+        checkObsoleteMovies();
     }
 
     private void setUpMoviesTable()
@@ -472,4 +473,25 @@ public class MovieController implements Initializable {
                 txtFilePath.setText(filepath);
             }
     }
+
+    private void checkObsoleteMovies() {
+        // 1. Retrieve the list of problematic movies through BLL
+        List<Movie> obsoleteMovies = manager.getMoviesToNotify();
+
+        // 2. If the list is not empty – show an Alert (or another dialog)
+        if (!obsoleteMovies.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Obsolete Movies");
+            alert.setHeaderText("Some movies may need to be deleted!");
+
+            StringBuilder sb = new StringBuilder("These movies have rating < 6 or haven't been viewed in 2+ years:\n\n");
+            for (Movie m : obsoleteMovies) {
+                sb.append("- ").append(m.getTitle()).append("\n");
+            }
+            alert.setContentText(sb.toString());
+            alert.showAndWait();
+
+        }
+    }
+
 }
