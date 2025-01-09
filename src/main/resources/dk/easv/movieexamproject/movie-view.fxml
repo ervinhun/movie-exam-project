@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="500.0" prefWidth="1170.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
+<StackPane prefHeight="500.0" prefWidth="1300.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
@@ -61,7 +61,7 @@
                         <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" />
                         <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" />
                         <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" />
-                        <TableColumn fx:id="clmControl" prefWidth="100" />
+                        <TableColumn fx:id="clmControl" prefWidth="250" />
                     </columns>
                 </TableView>
 

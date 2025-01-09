@@ -53,4 +53,8 @@ public class Movie
     {
         return lastView;
     }
+
+    public String getFileLink() {
+        return this.fileLink;
+    }
 }

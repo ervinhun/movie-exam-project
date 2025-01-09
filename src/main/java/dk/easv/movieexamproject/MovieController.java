@@ -3,6 +3,7 @@ package dk.easv.movieexamproject;
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
+import dk.easv.movieexamproject.dal.PlayingExt;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,10 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.net.URI;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -50,11 +57,14 @@ public class MovieController implements Initializable {
     @FXML private Label lblDeletingCategory;
     @FXML private Button btnChoose;
     @FXML private TableView<Movie> moviesTable;
+    @FXML private TableColumn<Movie, Void> clmPlay;
     @FXML private TableColumn<Movie, String> clmTitle;
     @FXML private TableColumn<Movie, String> clmImdb;
     @FXML private TableColumn<Movie, String> clmUserRating;
     @FXML private TableColumn<Movie, String> clmCategories;
     @FXML private TableColumn<Movie, String> clmLastView;
+    @FXML private TableColumn<Movie, Void> clmControl;
+    @FXML private Button btnSaveMovie;
     private ObservableList<Movie> items = FXCollections.observableArrayList();
     private FilteredList<Movie> filteredItems = new FilteredList<>(items);
     private ObservableList<Category> categories = FXCollections.observableArrayList();
@@ -80,7 +90,32 @@ public class MovieController implements Initializable {
 
     private void setUpMoviesTable()
     {
+        PlayingExt playMovie = new PlayingExt();
         moviesTable.setItems(filteredItems);
+        //Setting the Play button for each row
+        clmPlay.setCellFactory(column -> new TableCell<Movie, Void>() {
+            private final Button playButton = new Button();
+
+            {
+                playButton.setId("playButton");
+                playButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        playMovie.PlayingExt(movie);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null); // Remove the button if the row is empty
+                } else {
+                    setGraphic(playButton); // Add the button to the cell
+                }
+            }
+        });
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         clmImdb.setCellValueFactory(new PropertyValueFactory<>("IMDB"));
         clmUserRating.setCellValueFactory(new PropertyValueFactory<>("userRating"));
@@ -89,6 +124,106 @@ public class MovieController implements Initializable {
             return new SimpleStringProperty(String.join(", ", movie.getCategories()));
         });
         clmLastView.setCellValueFactory(new PropertyValueFactory<>("lastView"));
+        //Setting the control buttons after each row
+        clmControl.setCellFactory(column -> new TableCell<Movie, Void>() {
+            private final Button editButton = new Button();
+            private final Button deleteButton = new Button();
+            private final Button userRatingButton = new Button();
+            private final Button favoriteButton = new Button();
+            private final Button imdbButton = new Button("IMDB");
+            private final HBox buttonContainer = new HBox(5); // Container for buttons with spacing
+
+            {
+                // Add buttons to the container
+                buttonContainer.getChildren().addAll(editButton, deleteButton, userRatingButton, favoriteButton, imdbButton);
+
+                imdbButton.setStyle("-fx-background-color: #FFD700; -fx-text-fill: black;");
+
+                editButton.setId("editButton");
+                deleteButton.setId("deleteButton");
+                userRatingButton.setId("userRatingButton");
+                favoriteButton.setId("favoriteButton");
+
+                // Attach actions to buttons
+                editButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        editMovie(movie);
+                    }
+                });
+
+                userRatingButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        //setUserRating(movie);
+                    }
+                });
+
+                favoriteButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        //toggleFavorite(movie);
+                    }
+                });
+
+                imdbButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        openImdbPage(movie);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null); // Remove buttons for empty rows
+                } else {
+                    setGraphic(buttonContainer); // Add the button container to the cell
+                }
+            }
+        });
+    }
+
+
+    private void editMovie(Movie movie) {
+        showAddMovieWindow();
+        populateCategories();
+        btnSaveMovie.setOnAction(e -> editMovieSave());
+        txtFilePath.setText(movie.getFileLink());
+        txtMovieTitle.setText(movie.getTitle());
+        txtImdb.setText(String.valueOf(movie.getIMDB()));
+        txtUserScore.setText(String.valueOf(movie.getUserRating()));
+        for (Category category : categoriesListView.getItems()) {
+            for (String s : movie.getCategories()) {
+                if (category.getName().equals(s)) {
+                    categoriesListView.getSelectionModel().select(category);
+                }
+            }
+        }
+    }
+
+    private void editMovieSave() {
+        //To save to DB
+    }
+
+    private void openImdbPage(Movie movie) {
+        if (movie != null) {
+            try {
+                //Opening the IMDB page
+                String url = "https://www.imdb.com/find/?q=" +
+                        movie.getTitle().replace(" ", "+");
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    Desktop.getDesktop().browse(new URI(url));
+                } else {
+                    // Fallback for unsupported systems
+                    System.out.println("Cannot open browser. Unsupported platform.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setMovie(Movie movie)
