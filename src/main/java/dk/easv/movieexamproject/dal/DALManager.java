@@ -101,12 +101,35 @@ public class DALManager
         }
     }
 
-    public void addMovie(String name) {
+    public void addMovie(String name, float IMDB, float userRating, int[] categories, String fileLink, boolean favorite) {
         try (Connection con = connectionManager.getConnection()) {
-            String sqlcommandInsert = "INSERT INTO Movie (name) VALUES (?)";
-            PreparedStatement pstmtInsert = con.prepareStatement(sqlcommandInsert);
+            String sqlcommandInsert = "INSERT INTO Movie (name, rating, filelink, own_rating, favorite) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmtInsert = con.prepareStatement(sqlcommandInsert, Statement.RETURN_GENERATED_KEYS);
             pstmtInsert.setString(1, name);
-            pstmtInsert.execute();
+            pstmtInsert.setFloat(2, IMDB);
+            pstmtInsert.setString(3, fileLink);
+            pstmtInsert.setFloat(4, userRating);
+            pstmtInsert.setBoolean(5, favorite);
+
+            pstmtInsert.executeUpdate();
+
+            ResultSet generatedKeys = pstmtInsert.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int movieId = generatedKeys.getInt(1);
+
+
+                String sqlInsertCatMovie = "INSERT INTO CatMovie (MovieId, CategoryId) VALUES (?, ?)";
+                PreparedStatement pstmtInsertCatMovie = con.prepareStatement(sqlInsertCatMovie);
+
+
+                for (int categoryId : categories) {
+                    pstmtInsertCatMovie.setInt(1, movieId);
+                    pstmtInsertCatMovie.setInt(2, categoryId);
+                    pstmtInsertCatMovie.executeUpdate();
+                }
+            } else {
+                throw new SQLException("Failed to retrieve the generated movie ID.");
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();

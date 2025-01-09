@@ -156,17 +156,38 @@ public class MovieController implements Initializable {
         showAddMovieWindow();
         populateCategories();
     }
-    @FXML private void saveMovie() {
-        System.out.println("Save Movie");
-        System.out.println(txtFilePath.getText());
-        System.out.println(txtMovieTitle.getText());
-        System.out.println(txtImdb.getText());
-        System.out.println(txtUserScore.getText());
-        ObservableList<Category> selectedCategories = categoriesListView.getSelectionModel().getSelectedItems();
-        System.out.println("Selected Categories: " + selectedCategories);
-        hideAddMovieWindow();
-    }
+    @FXML
+    private void saveMovie() {
+        String title = txtMovieTitle.getText();
+        String filePath = txtFilePath.getText();
 
+        float imdbRating;
+        float userScore;
+
+        try {
+            imdbRating = Float.parseFloat(txtImdb.getText());
+            userScore = Float.parseFloat(txtUserScore.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format in IMDb or user score fields.");
+            return;
+        }
+
+        ObservableList<Category> selectedCategories = categoriesListView.getSelectionModel().getSelectedItems();
+
+        if (selectedCategories.isEmpty()) {
+            System.out.println("No categories selected.");
+            return;
+        }
+
+        // Transform selected categories to an array of IDs
+        int[] categoryIds = selectedCategories.stream()
+                .mapToInt(Category::getId)
+                .toArray();
+
+        manager.addMovie(title, imdbRating, userScore, categoryIds, filePath, false);
+        hideAddMovieWindow();
+        refreshMovies();
+    }
 
     @FXML private void saveNewCategory() {
         manager.addCategory(txtNewCategory.getText());

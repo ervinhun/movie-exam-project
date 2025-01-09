@@ -49,4 +49,8 @@ public class BLLManager {
         dalManager.retrieveMovie();
     }
 
+    public void addMovie(String name, float IMDB, float userRating, int[] categories, String fileLink, boolean favorite) {
+        dalManager.addMovie(name, IMDB, userRating, categories, fileLink, favorite);
+    }
+
 }
