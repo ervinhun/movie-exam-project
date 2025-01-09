@@ -46,6 +46,7 @@
                     <RadioButton fx:id="radio8" onAction="#addFilters" text="8" />
                     <RadioButton fx:id="radio9" onAction="#addFilters" text="9" />
                 </VBox>
+                <CheckBox fx:id="cbFavourite" text="Favourites" />
             </VBox>
         </left>
 
@@ -210,7 +211,7 @@
                     <Insets top="20.0" />
                 </VBox.margin>
                 <children>
-                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" text="Deleting file as well">
+                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" text="Deleting file" prefWidth="150">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
