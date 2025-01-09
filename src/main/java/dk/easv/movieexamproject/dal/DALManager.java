@@ -72,7 +72,7 @@ public class DALManager
     }
 
     public List<Category> getAllCategories() {
-        List<Category> categories = new ArrayList();
+        List<Category> categories = new ArrayList<>();
         try (Connection con = connectionManager.getConnection()) {
             String sqlcommandSelect = "SELECT * FROM Category";
             PreparedStatement pstmtSelect = con.prepareStatement(sqlcommandSelect);

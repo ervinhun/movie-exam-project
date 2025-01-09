@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MovieController implements Initializable {
@@ -102,6 +104,7 @@ public class MovieController implements Initializable {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(false);
             checkBox.setText(category.getName());
+            checkBox.setOnAction(_ -> addFilters());
             //scrlCategory.getChildren().add(checkBox);
             lstCategory.getItems().add(checkBox);
 
@@ -129,6 +132,7 @@ public class MovieController implements Initializable {
     {
         String searchText;
         int IMDBRating;
+        List<String> selectedCategories = new ArrayList<>();
 
         if(!searchField.getText().isEmpty())
         {
@@ -143,10 +147,21 @@ public class MovieController implements Initializable {
         }
         else IMDBRating = -1;
 
+        ObservableList<CheckBox> catItems = lstCategory.getItems();
+        for(CheckBox checkBox : catItems)
+        {
+            if(checkBox.isSelected())
+            {
+                selectedCategories.add(checkBox.getText());
+            }
+        }
+
         filteredItems.setPredicate(movie -> {
             boolean matchesTitle = searchText.isEmpty() || movie.getTitle().toLowerCase().startsWith(searchText);
             boolean matchesRating = IMDBRating == -1 || movie.getIMDB() >= IMDBRating;
-            return matchesTitle && matchesRating;
+            List<String> movieCategories = Arrays.asList(movie.getCategories());
+            boolean matchesCategories = selectedCategories.isEmpty() || selectedCategories.stream().allMatch(movieCategories::contains);
+            return matchesTitle && matchesRating && matchesCategories;
         });
     }
 

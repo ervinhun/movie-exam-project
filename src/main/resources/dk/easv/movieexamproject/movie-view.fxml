@@ -46,7 +46,6 @@
                     <RadioButton fx:id="radio8" onAction="#addFilters" text="8" />
                     <RadioButton fx:id="radio9" onAction="#addFilters" text="9" />
                 </VBox>
-                <Button fx:id="btnApplyFilter" text="Apply filters" />
             </VBox>
         </left>
 
