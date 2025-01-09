@@ -509,8 +509,12 @@ public class MovieController implements Initializable {
                 sb.append("- ").append(m.getTitle()).append("\n");
             }
             alert.setContentText(sb.toString());
+            //  connect the .css to change the color
+            alert.getDialogPane().getStylesheets().add(
+                    getClass().getResource("/dk/easv/movieexamproject/css/red.css").toExternalForm()
+            );
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
             alert.showAndWait();
-
         }
     }
     private void deleteMoviePopUp(Movie movie) {

@@ -169,3 +169,28 @@
 #favoriteButton {
     -fx-background-image: url('/dk/easv/movieexamproject/img/fav0.png');
 }
+.dialog-pane .header-panel { /* Changed style: Dark background for the alert's header section */
+    -fx-background-color: #141414;
+    -fx-text-fill: #ffffff;
+}
+
+.dialog-pane .content {
+    -fx-background-color: #141414;
+    -fx-text-fill: #ffffff;
+}
+
+.dialog-pane .graphic-container {
+    -fx-background-color: #141414;
+}
+
+.button-bar .button { /* Changed style: Red background for the alert's buttons */
+    -fx-background-color: #e50914;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: #141414;
+}
+
