@@ -76,7 +76,6 @@ public class MovieController implements Initializable {
         groupIMDBScore();
         setCategories();
         setUpMoviesTable();
-        items.add(new Movie(1, "TEST", 2.0f, 3.0f, new String[] {"asdd", "categ"}, null, "link", true));
     }
 
     private void setUpMoviesTable()
@@ -146,7 +145,7 @@ public class MovieController implements Initializable {
 
         filteredItems.setPredicate(movie -> {
             boolean matchesTitle = searchText.isEmpty() || movie.getTitle().toLowerCase().startsWith(searchText);
-            boolean matchesRating = IMDBRating == -1 || movie.getIMDB() == IMDBRating;
+            boolean matchesRating = IMDBRating == -1 || movie.getIMDB() >= IMDBRating;
             return matchesTitle && matchesRating;
         });
     }
