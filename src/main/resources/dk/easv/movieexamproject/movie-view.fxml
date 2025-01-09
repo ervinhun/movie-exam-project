@@ -21,7 +21,7 @@
 
         <!-- Left Pane (Filters) -->
         <left>
-            <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;">
+            <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;" prefWidth="240">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
                 <HBox spacing="5">
                     <TextField fx:id="searchField" onKeyTyped="#addFilters" promptText="Search for title" />
