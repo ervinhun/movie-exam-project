@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.sql.Date;
@@ -109,11 +110,15 @@ public class MovieController implements Initializable {
 
             {
                 playButton.setId("playButton");
-                playButton.setOnAction(event -> {
+                playButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
-                        playMovie.PlayingExt(movie);
+                        if(movie.getFileLink() != null && new File(movie.getFileLink()).exists())
+                        {
+                            playMovie.PlayingExt(movie);
+                        }
                         manager.updateLastView(movie);
+                        refreshMovies();
                     }
                 });
             }
