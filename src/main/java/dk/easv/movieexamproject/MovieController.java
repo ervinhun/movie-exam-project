@@ -210,7 +210,27 @@ public class MovieController implements Initializable {
 
 
     private void editMovie(Movie movie) {
-        showAddMovieWindow();
+        showAddMovieWindow();         // Makes popUpBg.setVisible
+        populateCategories();        // Populate the list with possible categories
+
+        // 2) Fill the form with all the current data
+        txtFilePath.setText(movie.getFileLink());
+        txtMovieTitle.setText(movie.getTitle());
+        txtImdb.setText(String.valueOf(movie.getIMDB()));
+        txtUserScore.setText(String.valueOf(movie.getUserRating()));
+
+        // 3) Highlight the categories that are already assigned to the movie
+        for (Category category : categoriesListView.getItems()) {
+            for (String catName : movie.getCategories()) {
+                if (category.getName().equals(catName)) {
+                    categoriesListView.getSelectionModel().select(category);
+                }
+            }
+        }
+
+        btnSaveMovie.setOnAction(e -> editMovieSave(movie));
+
+        /*showAddMovieWindow();
         populateCategories();
         btnSaveMovie.setOnAction(_ -> editMovieSave());
         txtFilePath.setText(movie.getFileLink());
@@ -223,12 +243,38 @@ public class MovieController implements Initializable {
                     categoriesListView.getSelectionModel().select(category);
                 }
             }
-        }
+        }*/
     }
 
-    private void editMovieSave() {
-        //To save to DB
+    private void editMovieSave(Movie movie) {
+        // Retrieve new values from the form
+        String newTitle = txtMovieTitle.getText();
+        String newFilePath = txtFilePath.getText();
+        float newImdb;
+        float newUserScore;
+
+        try {
+            newImdb = Float.parseFloat(txtImdb.getText());
+            newUserScore = Float.parseFloat(txtUserScore.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format in IMDb or user score fields.");
+            return;
+        }
+
+        // Collect IDs of the categories selected in the ListView
+        ObservableList<Category> selectedCategories = categoriesListView.getSelectionModel().getSelectedItems();
+        int[] categoryIds = selectedCategories.stream()
+                .mapToInt(Category::getId)
+                .toArray();
+
+        // Perform update in BLLManager
+        manager.updateMovie(movie, newTitle, newImdb, newUserScore, categoryIds, newFilePath, movie.isFavorite());
+
+        hideAddMovieWindow();
+
+        refreshMovies();
     }
+
 
     private void openImdbPage(Movie movie) {
         if (movie != null) {

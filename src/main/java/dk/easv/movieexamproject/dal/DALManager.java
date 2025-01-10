@@ -268,4 +268,44 @@ public class DALManager
             throw new RuntimeException(ex);
         }
     }
+
+    public void updateMovieInDB(int movieId, String newTitle, float newImdbRating, float newUserRating,
+                                int[] newCategoryIds, String newFileLink, boolean newFavorite)
+    {
+        try (Connection con = connectionManager.getConnection()) {
+            // 1) Update fields in the Movie table
+            String sqlUpdateMovie = """
+            UPDATE Movie
+            SET name = ?, rating = ?, own_rating = ?, filelink = ?, favorite = ?
+            WHERE id = ?
+        """;
+            PreparedStatement psUpdate = con.prepareStatement(sqlUpdateMovie);
+            psUpdate.setString(1, newTitle);
+            psUpdate.setFloat(2, newImdbRating);
+            psUpdate.setFloat(3, newUserRating);
+            psUpdate.setString(4, newFileLink);
+            psUpdate.setBoolean(5, newFavorite);
+            psUpdate.setInt(6, movieId);
+            psUpdate.executeUpdate();
+
+            // 2) Clear previous Movie–Category associations in CatMovie
+            String sqlDeleteCatMovie = "DELETE FROM CatMovie WHERE MovieId = ?";
+            PreparedStatement psDeleteCat = con.prepareStatement(sqlDeleteCatMovie);
+            psDeleteCat.setInt(1, movieId);
+            psDeleteCat.executeUpdate();
+
+            // 3) Insert new Movie–Category associations
+            String sqlInsertCatMovie = "INSERT INTO CatMovie (MovieId, CategoryId) VALUES (?, ?)";
+            PreparedStatement psInsertCat = con.prepareStatement(sqlInsertCatMovie);
+            for (int catId : newCategoryIds) {
+                psInsertCat.setInt(1, movieId);
+                psInsertCat.setInt(2, catId);
+                psInsertCat.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not update movie", e);
+        }
     }
+}

@@ -80,4 +80,17 @@ public class BLLManager {
     public void deleteCategory(Category category) {
         dalManager.deleteCategory(category);
     }
+
+    public void updateMovie(Movie movie, String newTitle, float newImdbRating,
+                            float newUserRating, int[] newCategories,
+                            String newFileLink, boolean newFavorite)
+    {
+        dalManager.updateMovieInDB(movie.getId(),
+                newTitle,
+                newImdbRating,
+                newUserRating,
+                newCategories,
+                newFileLink,
+                newFavorite);
+    }
 }
