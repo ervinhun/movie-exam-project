@@ -157,34 +157,34 @@ public class MovieController implements Initializable {
                 favoriteButton.setId("favoriteButton");
 
                 // Attach actions to buttons
-                editButton.setOnAction(event -> {
+                editButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         editMovie(movie);
                     }
                 });
-                deleteButton.setOnAction(event -> {
+                deleteButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         deleteMoviePopUp(movie);
                     }
                 });
 
-                userRatingButton.setOnAction(event -> {
+                userRatingButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         //setUserRating(movie);
                     }
                 });
 
-                favoriteButton.setOnAction(event -> {
+                favoriteButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         toggleFavorite(movie);
                     }
                 });
 
-                imdbButton.setOnAction(event -> {
+                imdbButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         openImdbPage(movie);
@@ -212,7 +212,7 @@ public class MovieController implements Initializable {
     private void editMovie(Movie movie) {
         showAddMovieWindow();
         populateCategories();
-        btnSaveMovie.setOnAction(e -> editMovieSave());
+        btnSaveMovie.setOnAction(_ -> editMovieSave());
         txtFilePath.setText(movie.getFileLink());
         txtMovieTitle.setText(movie.getTitle());
         txtImdb.setText(String.valueOf(movie.getIMDB()));
@@ -404,6 +404,7 @@ public class MovieController implements Initializable {
 @FXML private void clearFilters() {
         searchField.clear();
         filteredItems.setPredicate(null);
+        cbFavourite.setSelected(false);
         if (ratingGroup.getSelectedToggle() != null) {
             ratingGroup.getSelectedToggle().setSelected(false);
         }
