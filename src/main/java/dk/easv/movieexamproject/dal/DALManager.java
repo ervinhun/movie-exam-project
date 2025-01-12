@@ -1,5 +1,6 @@
 package dk.easv.movieexamproject.dal;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.bll.BLLManager;
@@ -34,56 +35,77 @@ public class DALManager
         }
     }
 
-    public void retrieveMovie()
+    public List<Movie> retrieveMovies(int id, boolean isRetrievingAll)
     {
-        String query = "SELECT * FROM Movie";
+        List<Movie> movies = new ArrayList<>();
+        ResultSet resultSet;
+        String allMoviesQuery = "SELECT * FROM Movie";
+        String singleMovieQuery = "SELECT * FROM Movie WHERE id = ?";
 
         try
         {
             Connection connection = connectionManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement;
 
-            while (resultSet.next())
+            if(isRetrievingAll)
             {
-                int id = resultSet.getInt("id");
+                preparedStatement = connection.prepareStatement(allMoviesQuery);
+            }
+            else
+            {
+                preparedStatement = connection.prepareStatement(singleMovieQuery);
+                preparedStatement.setInt(1, id);
+            }
+
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                int idx = resultSet.getInt("id");
                 String title = resultSet.getString("name");
                 float imdbRating = resultSet.getFloat("rating");
                 float userRating = resultSet.getFloat("own_rating");
                 String fileLink = resultSet.getString("filelink");
                 Date lastView = resultSet.getDate("lastview");
                 Boolean favorite = resultSet.getBoolean("favorite");
+                List<String> categories = retrieveCategories(idx);
 
+                movies.add(new Movie(idx, title, imdbRating, userRating, categories.toArray(new String[0]), lastView, fileLink, favorite));
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
 
-                List<String> categories = new ArrayList<>();
-                String categoryQuery =  "SELECT c.name FROM Category c " +
-                                        "JOIN CatMovie cm ON cm.CategoryId = c.id " +
-                                        "WHERE cm.MovieId = ?";
+        return movies;
+    }
 
-                try
-                {
-                    PreparedStatement categoryStatement = connection.prepareStatement(categoryQuery);
-                    categoryStatement.setInt(1, id);
-                    ResultSet categoryResultSet = categoryStatement.executeQuery();
+    private List<String> retrieveCategories(int id)
+    {
+        List<String> categories = new ArrayList<>();
+        String categoryQuery =  "SELECT c.name FROM Category c " +
+                                "JOIN CatMovie cm ON cm.CategoryId = c.id " +
+                                "WHERE cm.MovieId = ?";
 
-                    while (categoryResultSet.next())
-                    {
-                        categories.add(categoryResultSet.getString("name"));
-                    }
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                }
+        try
+        {
+            Connection connection = connectionManager.getConnection();
+            PreparedStatement categoryStatement = connection.prepareStatement(categoryQuery);
+            categoryStatement.setInt(1, id);
+            ResultSet categoryResults = categoryStatement.executeQuery();
 
-                Movie movie = new Movie(id, title, imdbRating, userRating, categories.toArray(new String[0]), lastView, fileLink, favorite);
-                bllManager.showMovie(movie);
+            while (categoryResults.next())
+            {
+                categories.add(categoryResults.getString("name"));
             }
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
+
+        return categories;
     }
 
     public List<Category> getAllCategories() {

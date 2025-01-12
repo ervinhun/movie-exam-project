@@ -20,7 +20,6 @@ public class BLLManager {
     {
         dalManager = new DALManager(this);
         this.movieController = movieController;
-        dalManager.retrieveMovie();
     }
 
     public String openFile(Window window) {
@@ -32,9 +31,9 @@ public class BLLManager {
         return null;
     }
 
-    public void showMovie(Movie movie)
+    public List<Movie> refreshMovieList(int id, boolean isRefreshingAll)
     {
-        movieController.setMovie(movie);
+        return dalManager.retrieveMovies(id, isRefreshingAll);
     }
 
     public List<Category> getAllCategories() {
@@ -43,11 +42,6 @@ public class BLLManager {
 
     public void addCategory (String name) {
         dalManager.addCategory(name);
-    }
-
-    public void refreshMovieList()
-    {
-        dalManager.retrieveMovie();
     }
 
     public void addMovie(String name, float IMDB, float userRating, int[] categories, String fileLink, boolean favorite) {

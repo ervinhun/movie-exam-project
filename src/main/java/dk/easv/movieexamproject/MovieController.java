@@ -93,6 +93,7 @@ public class MovieController implements Initializable {
         //CreateImdbScore score = new CreateImdbScore(vBoxRating);
         movieToDelete = null;
         manager = new BLLManager(this);
+        refreshMovies(-1, -1, true);
         groupIMDBScore();
         setCategories();
         setFavorite();
@@ -105,7 +106,7 @@ public class MovieController implements Initializable {
         PlayingExt playMovie = new PlayingExt();
         moviesTable.setItems(filteredItems);
         //Setting the Play button for each row
-        clmPlay.setCellFactory(column -> new TableCell<Movie, Void>() {
+        clmPlay.setCellFactory(_ -> new TableCell<Movie, Void>() {
             private final Button playButton = new Button();
 
             {
@@ -118,7 +119,7 @@ public class MovieController implements Initializable {
                             playMovie.PlayingExt(movie);
                         }
                         manager.updateLastView(movie);
-                        refreshMovies();
+                        refreshMovies(movie.getId(), items.indexOf(movie), false);
                     }
                 });
             }
@@ -142,7 +143,7 @@ public class MovieController implements Initializable {
         });
         clmLastView.setCellValueFactory(new PropertyValueFactory<>("lastView"));
         //Setting the control buttons after each row
-        clmControl.setCellFactory(column -> new TableCell<Movie, Void>() {
+        clmControl.setCellFactory(_ -> new TableCell<Movie, Void>() {
             private final Button editButton = new Button();
             private final Button deleteButton = new Button();
             private final Button userRatingButton = new Button();
@@ -165,7 +166,7 @@ public class MovieController implements Initializable {
                 editButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
-                        editMovie(movie);
+                        editMovie(movie, items.indexOf(movie));
                     }
                 });
                 deleteButton.setOnAction(_ -> {
@@ -185,7 +186,7 @@ public class MovieController implements Initializable {
                 favoriteButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
-                        toggleFavorite(movie);
+                        toggleFavorite(movie, items.indexOf(movie));
                     }
                 });
 
@@ -197,8 +198,10 @@ public class MovieController implements Initializable {
                 });
             }
 
-            public void toggleFavorite(Movie movie) {
+            public void toggleFavorite(Movie movie, int itemID)
+            {
                 manager.toggleFavorite(movie);
+                refreshMovies(movie.getId(), itemID, false);
             }
 
             @Override
@@ -214,17 +217,15 @@ public class MovieController implements Initializable {
     }
 
 
-    private void editMovie(Movie movie) {
-        showAddMovieWindow();         // Makes popUpBg.setVisible
-        populateCategories();        // Populate the list with possible categories
+    private void editMovie(Movie movie, int itemID) {
+        showAddMovieWindow();
+        populateCategories();
 
-        // 2) Fill the form with all the current data
         txtFilePath.setText(movie.getFileLink());
         txtMovieTitle.setText(movie.getTitle());
         txtImdb.setText(String.valueOf(movie.getIMDB()));
         txtUserScore.setText(String.valueOf(movie.getUserRating()));
 
-        // 3) Highlight the categories that are already assigned to the movie
         for (Category category : categoriesListView.getItems()) {
             for (String catName : movie.getCategories()) {
                 if (category.getName().equals(catName)) {
@@ -233,7 +234,7 @@ public class MovieController implements Initializable {
             }
         }
 
-        btnSaveMovie.setOnAction(e -> editMovieSave(movie));
+        btnSaveMovie.setOnAction(e -> editMovieSave(movie, itemID));
 
         /*showAddMovieWindow();
         populateCategories();
@@ -251,8 +252,7 @@ public class MovieController implements Initializable {
         }*/
     }
 
-    private void editMovieSave(Movie movie) {
-        // Retrieve new values from the form
+    private void editMovieSave(Movie movie, int itemID) {
         String newTitle = txtMovieTitle.getText();
         String newFilePath = txtFilePath.getText();
         float newImdb;
@@ -266,18 +266,16 @@ public class MovieController implements Initializable {
             return;
         }
 
-        // Collect IDs of the categories selected in the ListView
         ObservableList<Category> selectedCategories = categoriesListView.getSelectionModel().getSelectedItems();
         int[] categoryIds = selectedCategories.stream()
                 .mapToInt(Category::getId)
                 .toArray();
 
-        // Perform update in BLLManager
         manager.updateMovie(movie, newTitle, newImdb, newUserScore, categoryIds, newFilePath, movie.isFavorite());
 
         hideAddMovieWindow();
 
-        refreshMovies();
+        refreshMovies(movie.getId(), itemID, false);
     }
 
 
@@ -299,11 +297,6 @@ public class MovieController implements Initializable {
         }
     }
 
-    public void setMovie(Movie movie)
-    {
-        items.add(movie);
-    }
-
     private void setCategories() {
         categories.addAll(manager.getAllCategories());
         for (Category category : categories) {
@@ -319,7 +312,7 @@ public class MovieController implements Initializable {
 
     private void setFavorite() {
         cbFavourite.setSelected(false);
-        cbFavourite.setOnAction(_ -> addFavoriteFilter());
+        cbFavourite.setOnAction(_ -> addFilters());
     }
 
     private void groupIMDBScore()
@@ -378,10 +371,6 @@ public class MovieController implements Initializable {
         });
     }
 
-    private void addFavoriteFilter() {
-        addFilters();
-    }
-
     //Button clicks
     @FXML private void btnAddMovieClicked() {
         showAddMovieWindow();
@@ -417,7 +406,7 @@ public class MovieController implements Initializable {
 
         manager.addMovie(title, imdbRating, userScore, categoryIds, filePath, false);
         hideAddMovieWindow();
-        refreshMovies();
+        refreshMovies(-1, -1, true);
     }
 
     @FXML private void saveNewCategory() {
@@ -427,10 +416,17 @@ public class MovieController implements Initializable {
         hideAddPlaylistWindow();
     }
 
-    private void refreshMovies()
+    private void refreshMovies(int movieID, int itemsListID, boolean isRefreshingAll)
     {
-        items.clear();
-        manager.refreshMovieList();
+        if(isRefreshingAll)
+        {
+            items.clear();
+            items.addAll(manager.refreshMovieList(-1, true));
+        }
+        else
+        {
+            items.set(itemsListID, manager.refreshMovieList(movieID, false).getFirst());
+        }
     }
 
 
@@ -496,7 +492,7 @@ public class MovieController implements Initializable {
         lstCategory.getItems().removeIf(checkBox -> checkBox.getText().equals(category.getName()));
         hideDeleteCategoryConfirmationWindow();
         hideDeleteCategoryWindow();
-        refreshMovies();
+        refreshMovies(-1, -1, true);
     }
     @FXML private void btnCancelDeleteMovieClicked() {
         hideDeleteMoviePopUp();
