@@ -186,11 +186,7 @@ public class MovieController implements Initializable {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
                         toggleFavorite(movie, items.indexOf(movie));
-                    }
-                    if (movie.isFavorite()) {
-                        favoriteButton.setId("favoriteTrueButton");
-                    } else {
-                        favoriteButton.setId("favoriteButton");
+                        updateFavoriteButtonIcon(movie, favoriteButton);
                     }
                 });
 
@@ -205,7 +201,8 @@ public class MovieController implements Initializable {
             public void toggleFavorite(Movie movie, int itemID)
             {
                 manager.toggleFavorite(movie);
-                refreshMovies(movie.getId(), itemID, false);
+                movie.setFavorite(!movie.isFavorite());
+                //refreshMovies(movie.getId(), itemID, false);
             }
 
             @Override
@@ -226,7 +223,6 @@ public class MovieController implements Initializable {
     }
 
     private void updateFavoriteButtonIcon(Movie movie, Button favoriteButton) {
-        movie.setFavorite(!movie.isFavorite());
         if (movie.isFavorite()) {
             favoriteButton.setStyle("-fx-background-image: url('/dk/easv/movieexamproject/img/fav1.png')");
         }
