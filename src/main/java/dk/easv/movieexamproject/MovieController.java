@@ -202,7 +202,7 @@ public class MovieController implements Initializable {
             {
                 manager.toggleFavorite(movie);
                 movie.setFavorite(!movie.isFavorite());
-                //refreshMovies(movie.getId(), itemID, false);
+                refreshMovies(movie.getId(), itemID, false);
             }
 
             @Override
