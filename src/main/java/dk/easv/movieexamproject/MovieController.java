@@ -24,7 +24,6 @@ import java.awt.*;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -188,6 +187,11 @@ public class MovieController implements Initializable {
                     if (movie != null) {
                         toggleFavorite(movie, items.indexOf(movie));
                     }
+                    if (movie.isFavorite()) {
+                        favoriteButton.setId("favoriteTrueButton");
+                    } else {
+                        favoriteButton.setId("favoriteButton");
+                    }
                 });
 
                 imdbButton.setOnAction(_ -> {
@@ -210,10 +214,25 @@ public class MovieController implements Initializable {
                 if (empty) {
                     setGraphic(null); // Remove buttons for empty rows
                 } else {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    if (movie != null) {
+                        // Update the favorite button icon based on the movie's favorite status
+                        updateFavoriteButtonIcon(movie, favoriteButton);
+                    }
                     setGraphic(buttonContainer); // Add the button container to the cell
                 }
             }
         });
+    }
+
+    private void updateFavoriteButtonIcon(Movie movie, Button favoriteButton) {
+        movie.setFavorite(!movie.isFavorite());
+        if (movie.isFavorite()) {
+            favoriteButton.setStyle("-fx-background-image: url('/dk/easv/movieexamproject/img/fav1.png')");
+        }
+        else {
+            favoriteButton.setStyle("-fx-background-image: url('/dk/easv/movieexamproject/img/fav0.png')");
+        }
     }
 
 

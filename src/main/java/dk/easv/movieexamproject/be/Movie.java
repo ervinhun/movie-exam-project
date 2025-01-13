@@ -64,6 +64,7 @@ public class Movie
     public boolean isFavorite() {
         return favorite;
     }
+
     public void setFavorite(boolean b) {
         this.favorite = b;
     }
