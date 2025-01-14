@@ -2,7 +2,6 @@ package dk.easv.movieexamproject.dal;
 
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
-import dk.easv.movieexamproject.bll.BLLManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 public class DALManager {
     private final ConnectionManager connectionManager;
 
-    public DALManager(BLLManager bllManager) {
+    public DALManager() {
         this.connectionManager = new ConnectionManager();
     }
 
@@ -206,9 +205,9 @@ public class DALManager {
                 // Retrieve categories for the current movie:
                 List<String> categories = new ArrayList<>();
                 String catQuery = """
-                            SELECT c.name 
-                            FROM Category c 
-                            JOIN CatMovie cm ON cm.CategoryId = c.id 
+                            SELECT c.name
+                            FROM Category c
+                            JOIN CatMovie cm ON cm.CategoryId = c.id
                             WHERE cm.MovieId = ?
                         """;
                 try (PreparedStatement catStmt = conn.prepareStatement(catQuery)) {

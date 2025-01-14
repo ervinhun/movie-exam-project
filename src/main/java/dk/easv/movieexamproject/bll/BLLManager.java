@@ -18,7 +18,7 @@ public class BLLManager {
 
     public BLLManager(MovieController movieController)
     {
-        dalManager = new DALManager(this);
+        dalManager = new DALManager();
         this.movieController = movieController;
     }
 
