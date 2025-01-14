@@ -55,13 +55,13 @@
             <VBox spacing="10" style="-fx-padding: 10;">
                 <TableView fx:id="moviesTable" style="-fx-focus-color: transparent;">
                     <columns>
-                        <TableColumn fx:id="clmPlay" prefWidth="40" />
-                        <TableColumn fx:id="clmTitle" prefWidth="200" text="Title" />
-                        <TableColumn fx:id="clmImdb" prefWidth="100" text="IMDB Rating" />
-                        <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" />
-                        <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" />
-                        <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" />
-                        <TableColumn fx:id="clmControl" prefWidth="196.0" />
+                        <TableColumn fx:id="clmPlay" prefWidth="40" sortable="false"/>
+                        <TableColumn fx:id="clmTitle" prefWidth="200" text="Title" sortable="true" />
+                        <TableColumn fx:id="clmImdb" prefWidth="100" text="IMDB Rating" sortable="true"/>
+                        <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" sortable="true"/>
+                        <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" sortable="false"/>
+                        <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" sortable="true"/>
+                        <TableColumn fx:id="clmControl" prefWidth="196.0" sortable="false"/>
                     </columns>
                 </TableView>
 
@@ -138,7 +138,7 @@
                             </FXCollections>
                         </items>
                     </ListView>
-                    <TextField fx:id="txtFilePath" layoutX="15.0" layoutY="69.0" prefWidth="200.0" />
+                    <TextField fx:id="txtFilePath" layoutX="15.0" layoutY="69.0" prefWidth="200.0" disable="true"/>
                     <Button fx:id="btnChoose" layoutX="231.0" layoutY="67.0" mnemonicParsing="false" onAction="#choosePath" prefWidth="100.0" text="Choose" />
                     <Button fx:id="btnSaveMovie" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#saveMovie" prefWidth="100.0" text="Save" />
                     <Button fx:id="btnCancelMovie" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideAddMovie" prefWidth="100.0" text="Cancel" />
