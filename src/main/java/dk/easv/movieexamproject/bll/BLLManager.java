@@ -1,6 +1,6 @@
 package dk.easv.movieexamproject.bll;
 
-import dk.easv.movieexamproject.MovieController;
+import dk.easv.movieexamproject.pl.MovieController;
 import dk.easv.movieexamproject.be.Category;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.dal.ChooseFile;

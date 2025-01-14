@@ -1,5 +1,6 @@
 package dk.easv.movieexamproject;
 
+import dk.easv.movieexamproject.pl.MovieController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

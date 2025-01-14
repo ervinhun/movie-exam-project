@@ -16,19 +16,19 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="500.0" prefWidth="1300.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.MovieController">
+<StackPane prefHeight="500.0" prefWidth="1250.0" stylesheets="@css/red.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.movieexamproject.pl.WindowController">
     <BorderPane>
 
         <!-- Left Pane (Filters) -->
         <left>
-            <VBox alignment="TOP_LEFT" spacing="10" style="-fx-padding: 10;" prefWidth="240">
+            <VBox alignment="TOP_LEFT" prefWidth="240" spacing="10" style="-fx-padding: 10;">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Filters" />
                 <HBox spacing="5">
                     <TextField fx:id="searchField" onKeyTyped="#addFilters" promptText="Search for title" />
                     <!--
                     <Button fx:id="btnSearch" text="Search" />
                     -->
-                    <Button fx:id="btnClear" onMouseClicked="#clearFilters" text="Clear" />
+                    <Button fx:id="btnClear" onMouseClicked="#clearFilters" prefHeight="20.0" prefWidth="69.0" text="Clear" />
                 </HBox>
                 <Label fx:id="lblFilterCat" onMouseClicked="#openHideCategory" text="Category ▼" />
 
@@ -61,16 +61,16 @@
                         <TableColumn fx:id="clmUserRating" prefWidth="100" text="User Rating" />
                         <TableColumn fx:id="clmCategories" prefWidth="200" text="Categories" />
                         <TableColumn fx:id="clmLastView" prefWidth="150" text="Last View" />
-                        <TableColumn fx:id="clmControl" prefWidth="250" />
+                        <TableColumn fx:id="clmControl" prefWidth="196.0" />
                     </columns>
                 </TableView>
 
                 <!-- Buttons below table -->
                 <HBox alignment="CENTER" spacing="10">
-                    <Button fx:id="btnAddMovie" onAction="#btnAddMovieClicked" text="Add Movie" />
-                    <Button fx:id="btnAddCategory" onAction="#showAddPlaylistWindow" text="Add Category" />
-                    <Button fx:id="btnDeleteCategory" onAction="#showDeleteCategoryWindow" text="Delete Category" />
-                    <Button fx:id="btnClose" onAction="#btnCloseClicked" text="Close" />
+                    <Button fx:id="btnAddMovie" onAction="#showAddMovie" text="Add Movie" />
+                    <Button fx:id="btnAddCategory" onAction="#showAddCategory" text="Add Category" />
+                    <Button fx:id="btnDeleteCategory" onAction="#showDelCategory" text="Delete Category" />
+                    <Button fx:id="btnClose" onAction="#exitApp" text="Close" />
                 </HBox>
             </VBox>
         </center>
@@ -98,12 +98,12 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="50.0" prefWidth="200.0">
                 <children>
-                    <Button mnemonicParsing="false" onAction="#hideAddPlaylistWindow" prefWidth="100.0" text="Cancel">
+                    <Button mnemonicParsing="false" onAction="#hideAddCategory" prefWidth="100.0" text="Cancel">
                         <HBox.margin>
                             <Insets right="20.0" />
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="btnSaveCategory" mnemonicParsing="false" onAction="#saveNewCategory" prefWidth="100.0" text="Save" textAlignment="RIGHT" />
+                    <Button fx:id="btnSaveCategory" mnemonicParsing="false" onAction="#saveCategory" prefWidth="100.0" text="Save" textAlignment="RIGHT" />
                 </children>
                 <padding>
                     <Insets left="200.0" />
@@ -139,9 +139,9 @@
                         </items>
                     </ListView>
                     <TextField fx:id="txtFilePath" layoutX="15.0" layoutY="69.0" prefWidth="200.0" />
-                    <Button fx:id="btnChoose" layoutX="231.0" layoutY="67.0" mnemonicParsing="false" onAction="#btnChooseClicked" prefWidth="100.0" text="Choose" />
+                    <Button fx:id="btnChoose" layoutX="231.0" layoutY="67.0" mnemonicParsing="false" onAction="#choosePath" prefWidth="100.0" text="Choose" />
                     <Button fx:id="btnSaveMovie" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#saveMovie" prefWidth="100.0" text="Save" />
-                    <Button fx:id="btnCancelMovie" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideAddMovieWindow" prefWidth="100.0" text="Cancel" />
+                    <Button fx:id="btnCancelMovie" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideAddMovie" prefWidth="100.0" text="Cancel" />
                     <TextField fx:id="txtNewCategoryInMovie" layoutX="235.0" layoutY="174.0" prefWidth="200.0" promptText="Add new genre" visible="false" />
                     <Button fx:id="btnAddCategoryInMovie" layoutX="233.0" layoutY="206.0" mnemonicParsing="false" prefWidth="100.0" text="Add" visible="false" />
                 </children>
@@ -156,11 +156,11 @@
             <ListView fx:id="lstCategoryDelete" prefHeight="200">
             </ListView>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="50" prefWidth="500">
-                <Button fx:id="btnCancelDeleteCategory" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideDeleteCategoryWindow" prefWidth="100.0" text="Cancel">
+                <Button fx:id="btnCancelDeleteCategory" layoutX="121.0" layoutY="327.0" mnemonicParsing="false" onAction="#hideDelCategory" prefWidth="100.0" text="Cancel">
                <HBox.margin>
                   <Insets bottom="10.0" />
                </HBox.margin></Button>
-                <Button fx:id="btnDeleteCategoryPopUp" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#deleteCategoryConfirmation" prefWidth="100.0" text="Delete">
+                <Button fx:id="btnDeleteCategoryPopUp" layoutX="233.0" layoutY="327.0" mnemonicParsing="false" onAction="#showDelCategoryConfirm" prefWidth="100.0" text="Delete">
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="10.0" />
                </HBox.margin></Button>
@@ -182,12 +182,12 @@
                     <Insets top="20.0" />
                 </VBox.margin>
                 <children>
-                    <Button fx:id="btnCancelDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#btnCancelDeleteCategoryClicked" prefWidth="100.0" text="Cancel">
+                    <Button fx:id="btnCancelDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#hideDelCategoryConfirm" prefWidth="100.0" text="Cancel">
                         <HBox.margin>
                             <Insets left="100.0" />
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="btnYesDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#btnYesDeleteCategoryClicked" prefWidth="100.0" text="Yes">
+                    <Button fx:id="btnYesDeleteCategoryConfirmation" mnemonicParsing="false" onAction="#delCategoryConfirm" prefWidth="100.0" text="Yes">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
@@ -211,17 +211,17 @@
                     <Insets top="20.0" />
                 </VBox.margin>
                 <children>
-                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" text="Deleting file" prefWidth="150">
+                    <CheckBox fx:id="cbDeleteFile" mnemonicParsing="false" prefWidth="150" text="Deleting file">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
                     </CheckBox>
-                    <Button fx:id="btncancDelete" mnemonicParsing="false" onAction="#btnCancelDeleteMovieClicked" prefWidth="100.0" text="Cancel">
+                    <Button fx:id="btncancDelete" mnemonicParsing="false" onAction="#hideDelMoviePopUp" prefWidth="100.0" text="Cancel">
                         <HBox.margin>
                             <Insets left="100.0" />
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="btnYesDelete" mnemonicParsing="false" onAction="#btnYesDeleteMovieClicked" prefWidth="100.0" text="Yes">
+                    <Button fx:id="btnYesDelete" mnemonicParsing="false" onAction="#delMovieConfirm" prefWidth="100.0" text="Yes">
                         <HBox.margin>
                             <Insets left="10.0" />
                         </HBox.margin>
