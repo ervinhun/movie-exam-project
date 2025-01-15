@@ -17,11 +17,10 @@ public class TableViewController extends FilterController
 {
     protected void setUpMoviesTable() {
         PlayingExt playMovie = new PlayingExt();
-        SortedList<Movie> sortedData = new SortedList<>(filteredItems);
-        sortedData.comparatorProperty().bind(moviesTable.comparatorProperty());
-        moviesTable.setItems(sortedData);
+        SortedList<Movie> sortedItems = new SortedList<>(filteredItems);
+        sortedItems.comparatorProperty().bind(moviesTable.comparatorProperty());
+        moviesTable.setItems(sortedItems);
 
-      // moviesTable.setItems(filteredItems);
         //Setting the Play button for each row
         clmPlay.setCellFactory(_ -> new TableCell<>() {
             private final Button playButton = new Button();
@@ -66,7 +65,7 @@ public class TableViewController extends FilterController
         clmCategories.setSortable(true);
         clmLastView.setSortable(true);
 
-        clmControl.setCellFactory(_ -> new TableCell<Movie, Void>() {
+        clmControl.setCellFactory(_ -> new TableCell<>() {
             private final Button editButton = new Button();
             private final Button deleteButton = new Button();
             private final Button favoriteButton = new Button();
@@ -107,7 +106,11 @@ public class TableViewController extends FilterController
                 imdbButton.setOnAction(_ -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     if (movie != null) {
-                        openImdbPage(movie);
+                        try {
+                            openImdbPage(movie);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 });
             }
@@ -134,7 +137,7 @@ public class TableViewController extends FilterController
         });
     }
 
-    protected void openImdbPage(Movie movie) {
+    protected void openImdbPage(Movie movie) throws Exception {
         if (movie != null) {
             try {
                 String url = "https://www.imdb.com/find/?q=" +
@@ -145,7 +148,7 @@ public class TableViewController extends FilterController
                     System.out.println("Cannot open browser. Unsupported platform.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new Exception();
             }
         }
     }

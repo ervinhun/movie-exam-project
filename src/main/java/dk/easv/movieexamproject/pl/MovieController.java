@@ -116,7 +116,6 @@ public class MovieController implements Initializable
     protected static final String DELETING_MOVIE_LABEL = "Are you sure you want to delete ";
 
     protected BLLManager manager;
-    private WindowController windowController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -127,7 +126,7 @@ public class MovieController implements Initializable
         setCategories();
         setFavorite();
         setUpMoviesTable();
-        windowController = new WindowController();
+        WindowController windowController = new WindowController();
         windowController.checkObsoleteMovies(manager);
     }
 
@@ -280,7 +279,7 @@ public class MovieController implements Initializable
     //Managed by TableViewController
     protected void setUpMoviesTable() {}
 
-    protected void openImdbPage(Movie movie) {}
+    protected void openImdbPage(Movie movie) throws Exception {}
 
     //Managed by FilterController
 
