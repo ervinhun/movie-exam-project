@@ -3,6 +3,7 @@ package dk.easv.movieexamproject.pl;
 import dk.easv.movieexamproject.be.Movie;
 import dk.easv.movieexamproject.dal.PlayingExt;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,7 +17,11 @@ public class TableViewController extends FilterController
 {
     protected void setUpMoviesTable() {
         PlayingExt playMovie = new PlayingExt();
-        moviesTable.setItems(filteredItems);
+        SortedList<Movie> sortedData = new SortedList<>(filteredItems);
+        sortedData.comparatorProperty().bind(moviesTable.comparatorProperty());
+        moviesTable.setItems(sortedData);
+
+      // moviesTable.setItems(filteredItems);
         //Setting the Play button for each row
         clmPlay.setCellFactory(_ -> new TableCell<>() {
             private final Button playButton = new Button();
@@ -54,6 +59,12 @@ public class TableViewController extends FilterController
             return new SimpleStringProperty(String.join(", ", movie.getCategories()));
         });
         clmLastView.setCellValueFactory(new PropertyValueFactory<>("lastView"));
+
+        clmTitle.setSortable(true);
+        clmImdb.setSortable(true);
+        clmUserRating.setSortable(true);
+        clmCategories.setSortable(true);
+        clmLastView.setSortable(true);
 
         clmControl.setCellFactory(_ -> new TableCell<Movie, Void>() {
             private final Button editButton = new Button();
